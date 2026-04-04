@@ -2,18 +2,155 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LoyaltyApp – Fidelización para tu negocio</title>
-  <meta name="description" content="LoyaltyApp: el sistema de puntos y fidelización de clientes para bares, peluquerías, lavaderos y más. Retén clientes, premia visitas y haz crecer tu negocio." />
-  <meta property="og:title" content="LoyaltyApp – Fidelización inteligente" />
-  <meta property="og:description" content="Sistema de puntos QR para pequeños negocios. Fácil, rápido y efectivo." />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <!-- ── Primary SEO ─────────────────────────────── -->
+  <title>LoyaltyApp – Sistema de Fidelización con Puntos QR para Negocios</title>
+  <meta name="description" content="Fidelizá tus clientes con puntos QR sin apps que instalar. LoyaltyApp es el sistema de fidelización más simple para peluquerías, bares, cafeterías, lavaderos y más. Empezá gratis hoy." />
+  <meta name="keywords" content="fidelización de clientes, programa de puntos, QR lealtad, tarjeta de puntos digital, peluquería, bar, cafetería, lavadero, gimnasio, fidelizar clientes, loyalty app, puntos recompensas" />
+  <meta name="author" content="Futuwebs" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://loyaltyapp.futuwebs.com/" />
+
+  <!-- ── Open Graph / Facebook ─────────────────── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="LoyaltyApp" />
+  <meta property="og:url" content="https://loyaltyapp.futuwebs.com/" />
+  <meta property="og:title" content="LoyaltyApp – Fidelizá clientes con puntos QR" />
+  <meta property="og:description" content="El sistema de puntos QR más simple para tu negocio. Sin apps que instalar. Funciona para peluquerías, bares, lavaderos y más. Empezá gratis." />
+  <meta property="og:image" content="https://loyaltyapp.futuwebs.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="LoyaltyApp – Sistema de fidelización con puntos QR para negocios" />
+  <meta property="og:locale" content="es_AR" />
+
+  <!-- ── Twitter Cards ─────────────────────────── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="LoyaltyApp – Fidelizá clientes con puntos QR" />
+  <meta name="twitter:description" content="El sistema de puntos QR más simple para tu negocio. Sin apps que instalar. Gratis para empezar." />
+  <meta name="twitter:image" content="https://loyaltyapp.futuwebs.com/og-image.png" />
+  <meta name="twitter:image:alt" content="LoyaltyApp – Sistema de fidelización con puntos QR" />
+
+  <!-- ── Favicon & PWA ─────────────────────────── -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#ecfd18" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="LoyaltyApp" />
+  <meta name="application-name" content="LoyaltyApp" />
+
+  <!-- ── Geo & Language ────────────────────────── -->
+  <meta name="geo.region" content="AR" />
+  <meta name="geo.placename" content="Argentina" />
+  <link rel="alternate" hreflang="es" href="https://loyaltyapp.futuwebs.com/" />
+  <link rel="alternate" hreflang="x-default" href="https://loyaltyapp.futuwebs.com/" />
+
+  <!-- ── Performance ───────────────────────────── -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://qcrdbhbxcyqeyxwwhaiv.supabase.co" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <!-- PWA -->
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#4F46E5" />
+
+  <!-- ── Structured Data (JSON-LD) ─────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "LoyaltyApp",
+    "url": "https://loyaltyapp.futuwebs.com",
+    "description": "Sistema de fidelización de clientes con puntos QR para pequeños y medianos negocios. Sin apps que instalar.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "inLanguage": "es",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Freemium",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Hasta 20 clientes, 2 recompensas activas. Gratis para siempre."
+      },
+      {
+        "@type": "Offer",
+        "name": "Pro",
+        "price": "25",
+        "priceCurrency": "USD",
+        "billingDuration": "P1M",
+        "description": "Clientes y recompensas ilimitadas, analytics avanzados, notificaciones."
+      }
+    ],
+    "creator": {
+      "@type": "Organization",
+      "name": "Futuwebs",
+      "url": "https://futuwebs.com"
+    },
+    "featureList": [
+      "Programa de puntos QR",
+      "QR dinámico anti-fraude",
+      "Portal de cliente sin instalación",
+      "Recompensas personalizables",
+      "Dashboard de analytics",
+      "Notificaciones por segmento"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "LoyaltyApp",
+    "url": "https://loyaltyapp.futuwebs.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://loyaltyapp.futuwebs.com/#/join/{search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Necesito instalar una app para usar LoyaltyApp?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. LoyaltyApp funciona 100% desde el navegador web. Los clientes acceden a su tarjeta digital con un link, sin necesidad de descargar ninguna aplicación."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cuánto cuesta LoyaltyApp?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "LoyaltyApp tiene un plan Freemium gratuito para siempre (hasta 20 clientes) y un plan Pro por $25 USD al mes con clientes ilimitados y todas las funciones avanzadas."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Para qué tipo de negocios sirve LoyaltyApp?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "LoyaltyApp está pensado para peluquerías, bares, cafeterías, lavaderos de autos, gimnasios, spas, restaurantes y cualquier negocio que quiera fidelizar a sus clientes con puntos y recompensas."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo funcionan los puntos QR?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El cliente muestra su QR único al negocio. El dueño del negocio escanea el QR con la cámara del dispositivo. Los puntos se acreditan automáticamente. El QR expira cada 90 segundos y solo puede usarse una vez, lo que lo hace completamente seguro contra fraude."
+        }
+      }
+    ]
+  }
+  </script>
   <script type="module" crossorigin src="/assets/index-C3Y5Htek.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-DnTi6i6x.css">
 </head>

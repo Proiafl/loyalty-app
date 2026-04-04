@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Exclude auth and internal routes
+Disallow: /dashboard
+Disallow: /clientes
+Disallow: /recompensas
+Disallow: /canjes
+Disallow: /scanner
+Disallow: /notificaciones
+Disallow: /config
+Disallow: /onboarding
+Disallow: /mi-cuenta
+
+# Allow indexing of public pages
+Allow: /
+Allow: /login
+
+# Sitemap
+Sitemap: https://loyaltyapp.futuwebs.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 10
