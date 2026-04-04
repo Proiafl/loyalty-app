@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LoyaltyApp</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="app">
+    <div class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">LoyaltyApp</div>
+          <div class="brand-tag">Panel del negocio</div>
+        </div>
+      </div>
+
+      <div class="nav-section">Principal</div>
+      <div class="nav-item active" onclick="nav('dashboard',this)">
+        <div class="nav-dot"></div>Dashboard
+      </div>
+      <div class="nav-item" onclick="nav('clientes',this)">
+        <div class="nav-dot"></div>Clientes
+      </div>
+      <div class="nav-item" onclick="nav('recompensas',this)">
+        <div class="nav-dot"></div>Recompensas
+      </div>
+
+      <div class="nav-section">Herramientas</div>
+      <div class="nav-item" onclick="nav('scanner',this)">
+        <div class="nav-dot"></div>Escanear cliente
+      </div>
+      <div class="nav-item" onclick="nav('validaciones',this)">
+        <div class="nav-dot"></div>Validaciones
+      </div>
+      <div class="nav-item" onclick="nav('notificaciones',this)">
+        <div class="nav-dot"></div>Notificaciones
+      </div>
+      <div class="nav-item" onclick="nav('config',this)">
+        <div class="nav-dot"></div>Configuración
+      </div>
+
+      <div class="nav-section">Vista</div>
+      <div class="nav-item" onclick="nav('cliente',this)">
+        <div class="nav-dot"></div>Vista cliente
+      </div>
+
+      <div class="biz-badge">
+        <div class="biz-name">Peluquería Estilo</div>
+        <div class="biz-plan">Plan activo</div>
+        <div class="plan-pill">Freemium</div>
+      </div>
+    </div>
+
+    <div class="main">
+
+      <!-- DASHBOARD -->
+      <div class="section active" id="s-dashboard">
+        <div class="page-title">Dashboard</div>
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-label">Clientes totales</div>
+            <div class="stat-val">47</div>
+            <div class="stat-sub stat-up">+3 este mes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Visitas este mes</div>
+            <div class="stat-val">183</div>
+            <div class="stat-sub stat-up">+12% vs anterior</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Recompensas canjeadas</div>
+            <div class="stat-val">24</div>
+            <div class="stat-sub">últimos 30 días</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Puntos en circulación</div>
+            <div class="stat-val">1.240</div>
+            <div class="stat-sub">todos los clientes</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Visitas por semana</div>
+          <div class="bar-chart">
+            <div class="bar-col">
+              <div class="bar" style="height:55px"></div>
+              <div class="bar-lbl">Lun</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar" style="height:80px"></div>
+              <div class="bar-lbl">Mar</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar" style="height:60px"></div>
+              <div class="bar-lbl">Mié</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar" style="height:90px"></div>
+              <div class="bar-lbl">Jue</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar" style="height:100px"></div>
+              <div class="bar-lbl">Vie</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar" style="height:70px"></div>
+              <div class="bar-lbl">Sáb</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar" style="height:30px"></div>
+              <div class="bar-lbl">Dom</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Actividad reciente</div>
+          <div class="card-row"><span>María López canjeó "Corte gratis"</span><span class="time-label">hace 2h</span>
+          </div>
+          <div class="card-row"><span>Carlos García sumó 10 puntos</span><span class="time-label">hace 3h</span></div>
+          <div class="card-row"><span>Nuevo cliente: Ana Torres</span><span class="time-label">ayer</span></div>
+          <div class="card-row"><span>Pedro Díaz sumó 10 puntos</span><span class="time-label">ayer</span></div>
+        </div>
+      </div>
+
+      <!-- CLIENTES -->
+      <div class="section" id="s-clientes">
+        <div class="section-header">
+          <div class="page-title" style="margin-bottom:0">Clientes</div>
+          <button class="btn-primary" onclick="showToast('Disponible en plan Pro')">+ Agregar cliente</button>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Puntos</th>
+                  <th>Progreso</th>
+                  <th>Visitas</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="td-flex">
+                      <div class="avatar">ML</div>María López
+                    </div>
+                  </td>
+                  <td><strong class="pts-val">82</strong>/100</td>
+                  <td>
+                    <div class="prog-wrap">
+                      <div class="prog-bg">
+                        <div class="prog-fill" style="width:82%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>12</td>
+                  <td><span class="badge badge-active">Activo</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="td-flex">
+                      <div class="avatar">CG</div>Carlos García
+                    </div>
+                  </td>
+                  <td><strong class="pts-val">55</strong>/100</td>
+                  <td>
+                    <div class="prog-wrap">
+                      <div class="prog-bg">
+                        <div class="prog-fill" style="width:55%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>7</td>
+                  <td><span class="badge badge-active">Activo</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="td-flex">
+                      <div class="avatar">AT</div>Ana Torres
+                    </div>
+                  </td>
+                  <td><strong class="pts-val">10</strong>/100</td>
+                  <td>
+                    <div class="prog-wrap">
+                      <div class="prog-bg">
+                        <div class="prog-fill" style="width:10%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>1</td>
+                  <td><span class="badge badge-new">Nuevo</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="td-flex">
+                      <div class="avatar">PD</div>Pedro Díaz
+                    </div>
+                  </td>
+                  <td><strong class="pts-val">30</strong>/100</td>
+                  <td>
+                    <div class="prog-wrap">
+                      <div class="prog-bg">
+                        <div class="prog-fill" style="width:30%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>3</td>
+                  <td><span class="badge badge-inactive">Inactivo</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="td-flex">
+                      <div class="avatar">LM</div>Laura Martín
+                    </div>
+                  </td>
+                  <td><strong class="pts-val">97</strong>/100</td>
+                  <td>
+                    <div class="prog-wrap">
+                      <div class="prog-bg">
+                        <div class="prog-fill" style="width:97%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>15</td>
+                  <td><span class="badge badge-active">Activo</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECOMPENSAS -->
+      <div class="section" id="s-recompensas">
+        <div class="page-title">Recompensas</div>
+        <div class="reward-grid">
+          <div class="reward-card">
+            <div class="reward-icon">✂️</div>
+            <div class="reward-name">Corte gratis</div>
+            <div class="reward-pts">100 puntos</div>
+            <div class="reward-meta"><span class="canjes">12 canjes</span><button class="btn-edit"
+                onclick="showToast('Editando...')">Editar</button></div>
+          </div>
+          <div class="reward-card">
+            <div class="reward-icon">🎁</div>
+            <div class="reward-name">Descuento 20%</div>
+            <div class="reward-pts">50 puntos</div>
+            <div class="reward-meta"><span class="canjes">8 canjes</span><button class="btn-edit"
+                onclick="showToast('Editando...')">Editar</button></div>
+          </div>
+          <div class="reward-card">
+            <div class="reward-icon">💆</div>
+            <div class="reward-name">Tratamiento capilar</div>
+            <div class="reward-pts">80 puntos</div>
+            <div class="reward-meta"><span class="canjes">4 canjes</span><button class="btn-edit"
+                onclick="showToast('Editando...')">Editar</button></div>
+          </div>
+          <div class="reward-card reward-card-add" onclick="showToast('Crear nueva recompensa')">
+            <div class="reward-add-inner">
+              <div class="reward-add-plus">+</div>
+              <div style="font-size:13px">Nueva recompensa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCANNER -->
+      <div class="section" id="s-scanner">
+        <div class="page-title">Escanear cliente</div>
+        <div class="info-card">
+          <div class="info-step">
+            <div class="info-num">1</div>
+            <div class="info-text">El cliente abre <strong>LoyaltyApp</strong> en su teléfono y muestra su QR dinámico
+              personal.</div>
+          </div>
+          <div class="info-step">
+            <div class="info-num">2</div>
+            <div class="info-text">El negocio <strong>escanea el QR con su cámara</strong> o ingresa el token
+              manualmente. El QR es válido por <strong>90 segundos</strong>.</div>
+          </div>
+          <div class="info-step">
+            <div class="info-num">3</div>
+            <div class="info-text">El sistema valida el token, registra la visita y <strong>suma los puntos
+                automáticamente</strong>. El token queda invalidado.</div>
+          </div>
+        </div>
+        <div class="scan-panel">
+          <div class="scan-title"><span>↗</span> Ingresar token del cliente</div>
+          <div class="scan-input-row">
+            <input class="scan-input" id="scan-input" placeholder="ej: ML-20250325-A7F2" maxlength="20"
+              oninput="this.value=this.value.toUpperCase()">
+            <button class="btn-primary" onclick="doScan()">Validar</button>
+          </div>
+          <div class="scan-result" id="scan-result-ok">
+            <div class="scan-result-header">
+              <div class="avatar" id="sr-avatar">ML</div>
+              <div>
+                <div class="scan-result-name" id="sr-name">—</div>
+                <div class="scan-result-meta" id="sr-meta">—</div>
+              </div>
+            </div>
+            <div class="scan-result-pts" id="sr-pts">—</div>
+            <div class="scan-actions">
+              <button class="btn-primary" onclick="confirmScan()">Confirmar +10 puntos</button>
+              <button class="btn-ghost" onclick="cancelScan()">Cancelar</button>
+            </div>
+          </div>
+          <div class="scan-result err" id="scan-result-err">
+            <div class="scan-err-msg" id="sr-err">—</div>
+            <div class="scan-err-hint">Pedí al cliente que genere un nuevo QR en la app.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VALIDACIONES -->
+      <div class="section" id="s-validaciones">
+        <div class="page-title">Historial de validaciones</div>
+        <div class="card">
+          <div class="log-item">
+            <div class="log-icon ok">✓</div>
+            <div class="log-info">
+              <div class="log-name">María López</div>
+              <div class="log-detail">Token ML-20250325-A7F2 · +10 puntos · ahora 82 pts</div>
+            </div>
+            <div class="log-time">14:32</div>
+          </div>
+          <div class="log-item">
+            <div class="log-icon ok">✓</div>
+            <div class="log-info">
+              <div class="log-name">Carlos García</div>
+              <div class="log-detail">Token CG-20250325-B3D9 · +10 puntos · ahora 55 pts</div>
+            </div>
+            <div class="log-time">11:18</div>
+          </div>
+          <div class="log-item">
+            <div class="log-icon err">✕</div>
+            <div class="log-info">
+              <div class="log-name log-name-err">Token inválido</div>
+              <div class="log-detail">Token PD-20250324-C1E8 · expirado (>90s)</div>
+            </div>
+            <div class="log-time">10:05</div>
+          </div>
+          <div class="log-item">
+            <div class="log-icon err">✕</div>
+            <div class="log-info">
+              <div class="log-name log-name-err">Reuso detectado</div>
+              <div class="log-detail">Token ML-20250325-A6C1 · ya utilizado a las 09:42</div>
+            </div>
+            <div class="log-time">09:55</div>
+          </div>
+          <div class="log-item">
+            <div class="log-icon ok">✓</div>
+            <div class="log-info">
+              <div class="log-name">Laura Martín</div>
+              <div class="log-detail">Token LM-20250325-F9A3 · +10 puntos · ahora 97 pts</div>
+            </div>
+            <div class="log-time">09:42</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTIFICACIONES -->
+      <div class="section" id="s-notificaciones">
+        <div class="page-title">Enviar notificación</div>
+        <div class="card">
+          <div class="form-group">
+            <label class="form-label">Segmento</label>
+            <div class="segment-pills">
+              <div class="pill sel" onclick="togglePill(this)">Todos (47)</div>
+              <div class="pill" onclick="togglePill(this)">Activos (31)</div>
+              <div class="pill" onclick="togglePill(this)">Inactivos +30 días (8)</div>
+              <div class="pill" onclick="togglePill(this)">Cerca de canjear (12)</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mensaje</label>
+            <textarea class="textarea"
+              placeholder="Ej: ¡Hola! Esta semana 20% off en coloraciones. Vení a visitarnos 💈"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Canal</label>
+            <div class="toggle-row"><span class="toggle-label">WhatsApp</span><label class="toggle"><input
+                  type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="toggle-row"><span class="toggle-label">Email</span><label class="toggle"><input
+                  type="checkbox"><span class="slider"></span></label></div>
+            <div class="toggle-row"><span class="toggle-label">Push</span><label class="toggle"><input type="checkbox"
+                  checked><span class="slider"></span></label></div>
+          </div>
+          <button class="btn-primary" onclick="showToast('Notificación enviada a 47 clientes')">Enviar</button>
+        </div>
+      </div>
+
+      <!-- CONFIG -->
+      <div class="section" id="s-config">
+        <div class="page-title">Configuración</div>
+        <div class="card">
+          <div class="card-title">Datos del negocio</div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Nombre</label><input class="form-input"
+                value="Peluquería Estilo"></div>
+            <div class="form-group"><label class="form-label">Tipo</label><select class="form-input">
+                <option>Peluquería</option>
+                <option>Lavadero</option>
+                <option>Café</option>
+                <option>Gimnasio</option>
+                <option>Otro</option>
+              </select></div>
+          </div>
+          <div class="form-group"><label class="form-label">Dirección</label><input class="form-input"
+              value="Av. Corrientes 1234, CABA"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Sistema de puntos y QR</div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Método</label><select class="form-input">
+                <option>Por visita validada</option>
+                <option>Por gasto</option>
+                <option>Mixto</option>
+              </select></div>
+            <div class="form-group"><label class="form-label">Puntos por visita</label><input class="form-input"
+                type="number" value="10"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Validez del QR (segundos)</label><input class="form-input"
+                type="number" value="90"></div>
+            <div class="form-group"><label class="form-label">Máx. validaciones por día/cliente</label><input
+                class="form-input" type="number" value="1"></div>
+          </div>
+          <button class="btn-primary" onclick="showToast('Configuración guardada')">Guardar cambios</button>
+        </div>
+      </div>
+
+      <!-- VISTA CLIENTE -->
+      <div class="section" id="s-cliente">
+        <div class="page-title">Vista del cliente</div>
+        <p class="section-desc">El cliente muestra este QR al negocio. Se renueva automáticamente cada 90 segundos.</p>
+        <div class="client-view">
+          <div class="client-header">
+            <div class="client-biz-name">Peluquería Estilo</div>
+            <div class="client-pts" id="client-pts-display">82</div>
+            <div class="client-pts-lbl">puntos acumulados</div>
+            <div class="client-prog-wrap">
+              <div class="client-prog-label">18 puntos para "Corte gratis"</div>
+              <div class="client-prog-bg">
+                <div class="client-prog-fill"></div>
+              </div>
+            </div>
+          </div>
+          <div class="dqr-section">
+            <div class="dqr-label">Tu QR para sumar puntos</div>
+            <div class="dqr-box" id="dqr-box">
+              <svg id="dqr-svg" width="130" height="130" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="10" y="10" width="40" height="40" rx="4" fill="none" stroke="#c8f000" stroke-width="3.5" />
+                <rect x="22" y="22" width="16" height="16" rx="2" fill="#c8f000" />
+                <rect x="70" y="10" width="40" height="40" rx="4" fill="none" stroke="#c8f000" stroke-width="3.5" />
+                <rect x="82" y="22" width="16" height="16" rx="2" fill="#c8f000" />
+                <rect x="10" y="70" width="40" height="40" rx="4" fill="none" stroke="#c8f000" stroke-width="3.5" />
+                <rect x="22" y="82" width="16" height="16" rx="2" fill="#c8f000" />
+                <rect id="dqr-r1" x="70" y="70" width="8" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r2" x="82" y="70" width="8" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r3" x="94" y="70" width="16" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r4" x="70" y="82" width="16" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r5" x="90" y="82" width="20" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r6" x="70" y="94" width="8" height="16" rx="1" fill="#c8f000" />
+                <rect id="dqr-r7" x="82" y="96" width="28" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r8" x="56" y="10" width="8" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r9" x="56" y="22" width="8" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r10" x="56" y="34" width="8" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r11" x="10" y="56" width="8" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r12" x="22" y="56" width="8" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r13" x="34" y="56" width="22" height="8" rx="1" fill="#c8f000" />
+                <rect id="dqr-r14" x="56" y="56" width="8" height="8" rx="1" fill="#c8f000" />
+              </svg>
+              <div class="dqr-expired-overlay" id="dqr-overlay" style="display:none">
+                <div style="font-size:22px">↺</div>
+                <div class="dqr-expired-text">QR expirado</div>
+                <button class="btn-primary" style="font-size:11px;padding:5px 12px;margin-top:4px"
+                  onclick="renewQR()">Renovar QR</button>
+              </div>
+            </div>
+            <div class="dqr-expire">Expira en <span id="dqr-timer">90</span>s</div>
+            <div class="dqr-token" id="dqr-token">ML-20250325-A7F2</div>
+          </div>
+          <div class="client-rewards">
+            <div class="client-rewards-title">Recompensas</div>
+            <div class="client-reward">
+              <div class="cr-icon">✂️</div>
+              <div>
+                <div class="cr-name">Corte gratis</div>
+                <div class="cr-pts">100 puntos</div>
+              </div><button class="cr-btn" disabled>18 pts más</button>
+            </div>
+            <div class="client-reward">
+              <div class="cr-icon">🎁</div>
+              <div>
+                <div class="cr-name">Descuento 20%</div>
+                <div class="cr-pts">50 puntos</div>
+              </div><button class="cr-btn" onclick="showToast('Solicitando canje...')">Canjear</button>
+            </div>
+          </div>
+          <div class="client-history">
+            <div class="ch-title">Últimas visitas</div>
+            <div class="ch-item"><span>Visita validada — hoy</span><span class="ch-pts">+10 pts</span></div>
+            <div class="ch-item"><span>Visita validada — lun 24/3</span><span class="ch-pts">+10 pts</span></div>
+            <div class="ch-item"><span>Visita validada — vie 21/3</span><span class="ch-pts">+10 pts</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /app -->
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+
+</html>
