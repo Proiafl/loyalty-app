@@ -164,20 +164,65 @@ export async function renderClientDashboard(_, app, { user, profiles }) {
         const pts = parseInt(btn.dataset.rewardPts)
         const name = btn.dataset.rewardName
         if (!confirm(`¿Canjear "${name}" por ${pts} puntos?`)) return
-        const { error } = await supabase.from('customers').update({ points: profile.points - pts }).eq('id', profile.id)
-        if (!error) {
-          await supabase.from('point_transactions').insert({
-            business_id: biz.id, customer_id: profile.id,
-            type: 'redeem', points: -pts, reward_id: btn.dataset.rewardId
-          })
-          // Refresh profiles data
-          const { data: updated } = await supabase.from('customers')
-            .select('*, business:businesses(id, name, slug, type, logo_url, points_per_visit, qr_ttl_seconds)')
-            .eq('id', profile.id).single()
-          if (updated) profiles[activeIdx] = updated
-          showToast(`¡Canjeaste "${name}"! 🎁`)
-          render()
+
+        // 1. Disable immediately to prevent double-tap
+        btn.disabled = true
+        btn.textContent = 'Canjeando...'
+
+        // 2. Re-fetch FRESH points from DB to prevent race conditions
+        const { data: freshCustomer, error: fetchErr } = await supabase
+          .from('customers')
+          .select('points')
+          .eq('id', profile.id)
+          .single()
+
+        if (fetchErr || !freshCustomer) {
+          showToast('Error al verificar puntos. Intentá de nuevo.', 'error')
+          btn.disabled = false
+          btn.textContent = '¡Canjear!'
+          return
         }
+
+        // 3. Validate fresh points are still sufficient
+        if (freshCustomer.points < pts) {
+          showToast('No tenés suficientes puntos para este canje.', 'error')
+          btn.disabled = false
+          btn.textContent = `${pts - freshCustomer.points} más`
+          return
+        }
+
+        // 4. Deduct using the fresh value (not stale cache)
+        const newPoints = freshCustomer.points - pts
+        const { error: updateErr } = await supabase
+          .from('customers')
+          .update({ points: newPoints })
+          .eq('id', profile.id)
+
+        if (updateErr) {
+          showToast('Error al canjear. Intentá de nuevo.', 'error')
+          btn.disabled = false
+          btn.textContent = '¡Canjear!'
+          return
+        }
+
+        // 5. Log the transaction
+        await supabase.from('point_transactions').insert({
+          business_id: biz.id,
+          customer_id: profile.id,
+          type: 'redeem',
+          points: -pts,
+          reward_id: btn.dataset.rewardId
+        })
+
+        // 6. Refresh local profile from DB and re-render
+        const { data: updated } = await supabase
+          .from('customers')
+          .select('*, business:businesses(id, name, slug, type, logo_url, points_per_visit, qr_ttl_seconds)')
+          .eq('id', profile.id)
+          .single()
+        if (updated) profiles[activeIdx] = updated
+        showToast(`¡Canjeaste "${name}"! 🎁`)
+        render()
       }
     })
 
