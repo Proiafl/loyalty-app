@@ -796,6 +796,31 @@ select.form-input { appearance: none; cursor: pointer; }
   letter-spacing: .06em;
 }
 
+/* ── Floating Action Button (FAB) */
+.fab-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background: var(--grad-primary);
+  color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: var(--primary-glow);
+  cursor: pointer;
+  z-index: 999;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+}
+.fab-btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: var(--primary-glow-lg);
+}
+
 /* ── Utility */
 .hidden { display: none !important; }
 .mt-1 { margin-top: .5rem; } .mt-2 { margin-top: 1rem; } .mt-3 { margin-top: 1.5rem; } .mt-4 { margin-top: 2rem; }

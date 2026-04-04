@@ -1,5 +1,14 @@
 # Changelog LoyaltyApp
 
+## [2026-04-03] - Botones Flotantes (FAB) para QRs
+- **Descripción del cambio**: 
+  - Se agregó un botón flotante (`.fab-btn`) en el portal del cliente para desplazar su vista automáticamente al código QR.
+  - Se agregó un botón flotante en la vista del negocio que actúa como acceso rápido para redirigir a `/scanner` y prender la cámara de inmediato mediante el parámetro `?cam=1`.
+  - Se modificó la lógica de parseo en `src/lib/router.js` para admitir ignorar *query params* transparentemente en las rutas con hash (ej: `#/scanner?cam=1`).
+- **Motivo técnico/estético**: Proveer UX intuitiva con un solo toque (1-click access) para las tareas más frecuentes: el cliente queriendo mostrar su QR y el negocio queriendo leerlo.
+- **Pasos para revertir**: 
+  1. Eliminar elemento con clase `.fab-btn` de `src/components/nav.js` y de `src/pages/cliente/client-dashboard.js`.
+  2. Remover la clase `.fab-btn` de `style.css`.
 ## [2026-04-03] - Lector QR con Cámara
 - **Descripción del cambio**: 
   - Se instaló la librería `html5-qrcode`.

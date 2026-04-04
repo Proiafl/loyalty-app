@@ -222,4 +222,11 @@ export async function renderScanner(_, app, { biz }) {
     }
   })
   observer.observe(document.body, { childList: true, subtree: true })
+
+  // Auto-start camera if url param asks for it
+  if (window.location.hash.includes('cam=1')) {
+    setTimeout(startScanner, 300)
+    // Clean up url so it doesn't auto-start next time if simply navigated back
+    window.history.replaceState(null, '', '#/scanner')
+  }
 }

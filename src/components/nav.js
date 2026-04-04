@@ -36,6 +36,10 @@ export function renderNav(biz, activeId) {
         </div>
       </div>
     </aside>
+
+    <button class="fab-btn" id="fab-scan-cam" title="Escanear Cliente" onclick="window.location.hash='/scanner?cam=1'">
+      <span style="font-size: 1.4rem">📷</span>
+    </button>
   `
 }
 

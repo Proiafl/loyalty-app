@@ -11,7 +11,11 @@ export function route(path, handler) {
 }
 
 function matchRoute(hash) {
-  const clean = (hash || '').replace(/^#\/?/, '') || ''
+  let clean = (hash || '').replace(/^#\/?/, '') || ''
+  const queryIndex = clean.indexOf('?')
+  if (queryIndex !== -1) {
+    clean = clean.slice(0, queryIndex)
+  }
 
   // Exact match
   if (routes[clean] !== undefined) return { handler: routes[clean], params: {} }

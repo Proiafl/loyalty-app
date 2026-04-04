@@ -137,6 +137,10 @@ export async function renderClientDashboard(_, app, { user, profiles }) {
             `).join('') : '<p class="text-muted text-sm">Sin visitas aún.</p>'}
           </div>
         </div>
+
+        <button class="fab-btn" id="fab-show-qr" title="Mostrar QR">
+          <span style="font-size: 1.5rem">📱</span>
+        </button>
       </div>
     `
 
@@ -216,6 +220,16 @@ export async function renderClientDashboard(_, app, { user, profiles }) {
 
     document.getElementById('cp-btn-renew')?.addEventListener('click', initQR)
     initQR()
+
+    // ── FAB QR Link
+    document.getElementById('fab-show-qr').onclick = () => {
+      const el = document.querySelector('.qr-box')
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        el.style.boxShadow = 'var(--primary-glow-lg)'
+        setTimeout(() => el.style.boxShadow = 'var(--primary-glow)', 1500)
+      }
+    }
   }
 
   render()
