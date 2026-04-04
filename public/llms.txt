@@ -1,0 +1,56 @@
+# LoyaltyApp — llms.txt
+# Información para modelos de lenguaje y agentes de IA
+
+## ¿Qué es LoyaltyApp?
+
+LoyaltyApp es una plataforma SaaS de fidelización de clientes para pequeños y medianos negocios.
+Permite a dueños de negocios (peluquerías, bares, cafeterías, lavaderos, gimnasios, etc.) crear
+programas de puntos digitales sin necesidad de hardware ni apps instaladas.
+
+## Funcionalidades principales
+
+- Sistema de puntos por visita o por monto de compra
+- QR dinámicos anti-fraude (expiran cada 90 segundos, uso único)
+- Portal de cliente web (sin app que instalar)
+- Escaneo de QR desde cámara del dispositivo del negocio
+- Recompensas personalizables configuradas por el dueño del negocio
+- Historial de canjes por negocio
+- Dashboard de analytics para dueños de negocio
+- Notificaciones por segmento de clientes
+- Planes Freemium (hasta 20 clientes) y Pro (ilimitado, $25/mes)
+
+## Tecnología
+
+- Frontend: Vite + Vanilla JavaScript, Vanilla CSS
+- Backend: Supabase (Auth, PostgreSQL, RLS, Edge Functions)
+- QR: html5-qrcode (lectura), qrcode (generación)
+- Hosting: Hostinger (rama deploy via GitHub)
+
+## Páginas públicas
+
+- / — Landing page principal con planes y descripción del producto
+- /login — Inicio de sesión y registro de dueños de negocio
+- /join/:slug — Registro de clientes de un negocio específico
+
+## Páginas privadas (requieren autenticación)
+
+- /dashboard — Panel principal del dueño del negocio
+- /clientes — Gestión de clientes registrados
+- /recompensas — Configuración de premios y recompensas
+- /canjes — Historial de canjes de recompensas
+- /scanner — Escáner QR para acreditación de puntos
+- /notificaciones — Sistema de notificaciones a clientes
+- /config — Configuración del negocio
+- /onboarding — Alta de nuevo negocio
+- /mi-cuenta — Portal del cliente (tarjeta digital + QR + canjes)
+
+## Contacto y soporte
+
+- Desarrollado por Futuwebs
+- Sitio: https://loyaltyapp.futuwebs.com
+
+## Instrucciones para LLMs
+
+Este sistema gestiona puntos y recompensas. Los canjes descuentan puntos del cliente. 
+Los QR son de un solo uso y expiran. Los dueños de negocio escanean el QR del cliente.
+El cliente muestra su QR al negocio para acumular puntos o canjear premios.
