@@ -1,4 +1,4 @@
-import{a as e,n as t,o as n,r,s as i,t as a}from"./index-Df5EdvAn.js";var o=i(t(),1);async function s(t,i,{user:s,profiles:c}){if(!c||c.length===0){i.innerHTML=`
+import{a as e,n as t,o as n,r,s as i,t as a}from"./index-B8j-MYBO.js";var o=i(t(),1);async function s(t,i,{user:s,profiles:c}){if(!c||c.length===0){i.innerHTML=`
       <div class="client-portal">
         <div class="client-portal-header">
           <div class="client-portal-user">
