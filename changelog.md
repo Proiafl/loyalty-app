@@ -1,5 +1,15 @@
 # Changelog LoyaltyApp
 
+## [2026-04-03] - Módulo de Canjes y Débito de Puntos
+- **Descripción del cambio**: 
+  - Se creó la sección **"Canjes"** en el panel del dueño de negocio, permitiendo ver una lista histórica de premios reclamados por los clientes.
+  - Se confirmó y reforzó la lógica de **débito de puntos**: cuando un cliente canjea un premio desde su portal, los puntos se restan automáticamente de su balance y se registra una transacción de tipo `redeem`.
+  - Se agregó el acceso a "Canjes" en el menú de navegación lateral.
+- **Motivo técnico/estético**: Permitir al negocio llevar un control de qué clientes han reclamado premios y cuándo, asegurando que la economía de puntos sea consistente.
+- **Pasos para revertir**: 
+  1. Eliminar `src/pages/canjes.js`.
+  2. Remover la ruta de `canjes` en `src/main.js` y el item del menú en `src/components/nav.js`.
+
 ## [2026-04-03] - Acreditación Automática de Puntos
 - **Descripción del cambio**: 
   - Se eliminó el paso de confirmación manual del negocio tras escanear un QR.

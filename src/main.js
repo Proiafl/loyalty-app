@@ -8,6 +8,7 @@ import { renderDashboard } from './pages/dashboard.js'
 import { renderClientes } from './pages/clientes.js'
 import { renderRecompensas } from './pages/recompensas.js'
 import { renderScanner } from './pages/scanner.js'
+import { renderCanjes } from './pages/canjes.js'
 import { renderNotificaciones } from './pages/notificaciones.js'
 import { renderConfig } from './pages/config.js'
 import { renderClientCard } from './pages/cliente/card.js'
@@ -64,6 +65,7 @@ route('onboarding', async (_, app) => {
 route('dashboard', guardedRoute(renderDashboard))
 route('clientes', guardedRoute(renderClientes))
 route('recompensas', guardedRoute(renderRecompensas))
+route('canjes', guardedRoute(renderCanjes))
 route('scanner', guardedRoute(renderScanner))
 route('notificaciones', guardedRoute(renderNotificaciones))
 route('config', guardedRoute(renderConfig))

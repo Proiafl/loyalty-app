@@ -5,6 +5,7 @@ const NAV_ITEMS = [
   { id: 'dashboard', label: 'Dashboard', icon: '📊', path: '/dashboard' },
   { id: 'clientes', label: 'Clientes', icon: '👥', path: '/clientes' },
   { id: 'recompensas', label: 'Recompensas', icon: '🎁', path: '/recompensas' },
+  { id: 'canjes', label: 'Canjes', icon: '🎟️', path: '/canjes' },
   { id: 'scanner', label: 'Escanear', icon: '📷', path: '/scanner' },
   { id: 'notificaciones', label: 'Notificaciones', icon: '📣', path: '/notificaciones' },
   { id: 'config', label: 'Configuración', icon: '⚙️', path: '/config' },
@@ -22,11 +23,11 @@ export function renderNav(biz, activeId) {
       </div>
 
       <div class="nav-section">Principal</div>
-      ${NAV_ITEMS.slice(0, 3).map(item => navItem(item, activeId)).join('')}
+      ${NAV_ITEMS.slice(0, 4).map(item => navItem(item, activeId)).join('')}
 
       <div class="nav-divider"></div>
       <div class="nav-section">Herramientas</div>
-      ${NAV_ITEMS.slice(3).map(item => navItem(item, activeId)).join('')}
+      ${NAV_ITEMS.slice(4).map(item => navItem(item, activeId)).join('')}
 
       <div class="sidebar-footer">
         <div class="biz-badge">
