@@ -47,6 +47,11 @@ export async function renderJoin({ slug }, app) {
             <label class="form-label">Email *</label>
             <input class="form-input" id="join-email" type="email" placeholder="maria@email.com" required value="${user?.email || ''}" ${user ? 'readonly' : ''} />
           </div>
+          ${!user ? `
+          <div class="form-group">
+            <label class="form-label">Contraseña *</label>
+            <input class="form-input" id="join-password" type="password" placeholder="Mínimo 8 caracteres" required minlength="8" />
+          </div>` : ''}
           <div class="form-group">
             <label class="form-label">Teléfono (opcional)</label>
             <input class="form-input" id="join-phone" type="tel" placeholder="+54 11 1234-5678" />
@@ -73,18 +78,19 @@ export async function renderJoin({ slug }, app) {
     })
   }
 
-  let newCustomerId = null
+  let finalUser = user
 
   document.getElementById('join-form').addEventListener('submit', async (e) => {
     e.preventDefault()
     const btn = document.getElementById('join-btn')
     const name = document.getElementById('join-name').value.trim()
     const email = document.getElementById('join-email').value.trim()
+    const password = !finalUser ? document.getElementById('join-password').value : null
     const phone = document.getElementById('join-phone').value.trim()
 
     btn.disabled = true; btn.textContent = 'Registrando...'
 
-    // Check if freemium limit reached
+    // 1. Check if freemium limit reached
     if (biz.plan === 'freemium') {
       const { count } = await supabase.from('customers').select('*', { count: 'exact', head: true }).eq('business_id', biz.id)
       if (count >= 20) {
@@ -94,31 +100,61 @@ export async function renderJoin({ slug }, app) {
       }
     }
 
-    // Check if already exists by email
-    const { data: existing } = await supabase.from('customers').select('id').eq('business_id', biz.id).eq('email', email).single()
-    if (existing) {
-      // Link user_id if logged in and not yet linked
-      if (user) {
-        await supabase.from('customers').update({ user_id: user.id }).eq('id', existing.id)
+    // 2. Handle Auth if not logged in
+    if (!finalUser) {
+      try {
+        const { data: authData, error: authErr } = await supabase.auth.signUp({
+          email, password,
+          options: { data: { full_name: name, phone: phone } }
+        })
+        if (authErr) throw authErr
+        finalUser = authData.user
+        if (!finalUser) {
+          // Typically happens if email confirms are on and user already exists but unconfirmed
+          showToast('Si ya tenés cuenta, por favor ingresá primero.', 'error')
+          btn.disabled = false; btn.textContent = 'Registrarme'
+          return
+        }
+      } catch (err) {
+        // If user already exists in Auth, Supabase might return an error
+        if (err.message?.includes('already registered')) {
+          showToast('Email ya registrado. Por favor, ingresá a tu cuenta.', 'error')
+          sessionStorage.setItem('loyaltyapp_join_slug', slug)
+          setTimeout(() => navigate('/login'), 2000)
+        } else {
+          showToast('Error de registro: ' + err.message, 'error')
+        }
+        btn.disabled = false; btn.textContent = 'Registrarme'
+        return
       }
-      newCustomerId = existing.id
+    }
+
+    // 3. Create or link customer record
+    // Check if already exists in CUSTOMERS for THIS business
+    const { data: existing } = await supabase.from('customers').select('id').eq('business_id', biz.id).eq('email', email).single()
+    
+    if (existing) {
+      // Link user_id if needed
+      await supabase.from('customers').update({ user_id: finalUser.id, name, phone: phone || null }).eq('id', existing.id)
       showSuccess()
       return
     }
 
-    const insertData = {
-      business_id: biz.id, name, email, phone: phone || null,
-      user_id: user?.id || null
-    }
+    const { data: customer, error: custErr } = await supabase
+      .from('customers')
+      .insert({
+        business_id: biz.id,
+        user_id: finalUser.id,
+        name, email,
+        phone: phone || null
+      })
+      .select().single()
 
-    const { data, error } = await supabase.from('customers').insert(insertData).select().single()
-
-    if (error) {
-      showToast('Error al registrarte: ' + error.message, 'error')
+    if (custErr) {
+      showToast('Error al vincular con el negocio: ' + custErr.message, 'error')
       btn.disabled = false; btn.textContent = 'Registrarme'
       return
     }
-    newCustomerId = data.id
     showSuccess()
   })
 
@@ -126,12 +162,7 @@ export async function renderJoin({ slug }, app) {
     document.getElementById('join-form').classList.add('hidden')
     document.getElementById('join-success').classList.remove('hidden')
     document.getElementById('btn-goto-portal').onclick = () => {
-      if (user) {
-        navigate('/mi-cuenta')
-      } else {
-        // Not logged in: go to public card view
-        navigate(`c/${slug}/${newCustomerId}`)
-      }
+      navigate('/mi-cuenta')
     }
   }
 }

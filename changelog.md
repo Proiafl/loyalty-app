@@ -1,5 +1,16 @@
 # Changelog LoyaltyApp
 
+## [2026-04-04] - Registro Seguro de Clientes
+- **Descripción del cambio**: 
+  - Se añadió un campo de **Contraseña** en la página de registro de clientes del negocio (`src/pages/cliente/join.js`).
+  - Se implementó la lógica de `supabase.auth.signUp` para crear una cuenta de usuario real en Supabase al momento del registro.
+  - Los clientes ahora pueden iniciar sesión con su email y contraseña desde la página de `/login`.
+  - Se vincula automáticamente el `user_id` de la autenticación con el registro en la tabla `customers`, permitiendo la persistencia de datos entre dispositivos y sesiones.
+- **Motivo técnico/estético**: Resolver la limitación donde los clientes no podían re-ingresar a su portal si cerraban la sesión, mejorando significativamente la retención y seguridad del usuario final.
+- **Pasos para revertir**: 
+  1. En `join.js`, remover el campo de contraseña del HTML y eliminar el bloque de `supabase.auth.signUp` en el handler del form.
+  2. Revertir la lógica de inserción simple en la tabla `customers` sin requerir un `user_id` verificado.
+
 ## [2026-04-04] - Despliegue de Aplicación y Git (Hostinger Fix)
 - **Descripción del cambio**: 
   - Se inicializó el repositorio Git local vinculado a `https://github.com/Proiafl/loyalty-app.git`.
