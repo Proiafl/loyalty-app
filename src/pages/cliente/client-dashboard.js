@@ -54,7 +54,7 @@ export async function renderClientDashboard(_, app, { user, profiles }) {
     const pct = nextReward ? Math.min(100, Math.round((profile.points / nextReward.points_required) * 100)) : 100
 
     app.innerHTML = `
-      <div class="client-portal">
+      <div class="client-portal" style="padding-bottom: 5.5rem">
         <!-- Header -->
         <div class="client-portal-header">
           <div class="client-portal-user">

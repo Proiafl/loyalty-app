@@ -821,6 +821,12 @@ select.form-input { appearance: none; cursor: pointer; }
   box-shadow: var(--primary-glow-lg);
 }
 
+/* ── Canje card mobile */
+.canje-card { transition: background .15s; }
+.canje-card:hover { background: var(--surface-hover); }
+.canje-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.text-xs { font-size: .72rem; }
+
 /* ── Utility */
 .hidden { display: none !important; }
 .mt-1 { margin-top: .5rem; } .mt-2 { margin-top: 1rem; } .mt-3 { margin-top: 1.5rem; } .mt-4 { margin-top: 2rem; }
@@ -837,20 +843,111 @@ select.form-input { appearance: none; cursor: pointer; }
 .not-found h1 { font-size: 4rem; color: var(--primary); margin-bottom: 1rem; }
 .not-found p { color: var(--on-surface-muted); margin-bottom: 2rem; }
 
-/* ── Responsive */
+/* ══════════════════════════════════════════
+   MOBILE-FIRST RESPONSIVE (≤ 768px)
+   Native app feel: bottom tab bar
+══════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .app-shell { flex-direction: column; }
-  .sidebar { width: 100%; min-height: auto; position: static; flex-direction: row; flex-wrap: wrap; align-items: center; padding: 1rem; gap: .5rem; border-right: none; border-bottom: 1px solid var(--surface-border); }
-  .sidebar-brand { border-bottom: none; margin-bottom: 0; padding: 0; }
-  .nav-section { display: none; }
-  .sidebar-footer { display: none; }
-  .main-content { padding: 1rem; }
+
+  /* ── App shell stacks vertically */
+  .app-shell {
+    flex-direction: column;
+    min-height: 100dvh;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar becomes BOTTOM NAV */
+  .sidebar {
+    width: 100%;
+    min-height: unset;
+    height: 60px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    padding: 0;
+    gap: 0;
+    border-right: none;
+    border-top: 1px solid var(--surface-border);
+    background: var(--bg);
+    /* iOS safe area */
+    padding-bottom: env(safe-area-inset-bottom);
+    /* Order inside sidebar: only nav-items visible */
+    order: 2;
+  }
+
+  /* Hide decorative sidebar elements on mobile */
+  .sidebar-brand,
+  .sidebar-footer,
+  .nav-section,
+  .nav-divider {
+    display: none !important;
+  }
+
+  /* Nav items become tab buttons */
+  .nav-item {
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 4px;
+    margin-bottom: 0;
+    border-radius: 0;
+    font-size: .6rem;
+    font-weight: 500;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .nav-item.active {
+    background: transparent;
+    color: var(--primary);
+    border-top: 2px solid var(--primary);
+  }
+
+  /* Main content fills above the bottom nav */
+  .main-content {
+    order: 1;
+    flex: 1;
+    padding: 1.25rem 1rem 5rem; /* bottom padding clears the nav */
+    overflow-y: auto;
+    min-height: calc(100dvh - 60px);
+  }
+
+  /* FAB floats above bottom nav */
+  .fab-btn {
+    bottom: calc(60px + 1rem + env(safe-area-inset-bottom));
+  }
+
+  /* ── General page adjustments */
   .form-row { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .display-xl { font-size: 2.5rem; }
-  .hero h1 { font-size: 2rem; }
+  .display-xl { font-size: 2rem; }
+  .hero h1 { font-size: 1.75rem; }
+  .page-title { font-size: 1.4rem; }
+  .page-header { margin-bottom: 1.25rem; }
+
+  /* Scan panel full width */
+  #qr-reader { max-width: 100% !important; }
+
+  /* Tables → scroll horizontally */
+  .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .data-table { min-width: 420px; }
+
+  /* Toast higher up on mobile */
+  .toast { bottom: calc(70px + 1rem); }
 }
+
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }
   .biz-type-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-actions { flex-direction: column; }
+  .scan-input-row { flex-direction: column; }
+  .scan-input { width: 100%; }
 }
