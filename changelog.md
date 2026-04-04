@@ -1,5 +1,17 @@
 # Changelog LoyaltyApp
 
+## [2026-04-04] - Despliegue de Aplicación y Git (Hostinger Fix)
+- **Descripción del cambio**: 
+  - Se inicializó el repositorio Git local vinculado a `https://github.com/Proiafl/loyalty-app.git`.
+  - Se subió el código fuente a la rama `master`.
+  - Se generó el build de producción mediante `npm run build`.
+  - Se creó y publicó la rama `deploy` conteniendo exclusivamente los archivos estáticos de la carpeta `dist`.
+- **Motivo técnico/estético**: Seguimiento del protocolo de despliegue para Hostinger y sincronización de cambios solicitada por el usuario. 
+- **Pasos para revertir**: 
+  1. Eliminar la rama `deploy` del repositorio remoto: `git push origin --delete deploy`.
+  2. Borrar la carpeta `.git` local si se desea reiniciar el seguimiento de versiones.
+
+
 ## [2026-04-02] - Actualización de Planes (Freemium y Pro)
 - **Descripción del cambio**: 
   - Se modificaron los límites del plan **Freemium** de 50 a 20 clientes. Este límite se estipuló en los textos de `src/pages/landing.js` y `src/pages/config.js` y se añadió una validación dura con Supabase en la adición manual (`src/pages/clientes.js`) y el auto-registro de cliente (`src/pages/cliente/join.js`).
