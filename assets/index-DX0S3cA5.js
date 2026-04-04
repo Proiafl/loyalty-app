@@ -646,78 +646,60 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
         </div>
         <div class="log-time">${new Date(e.created_at).toLocaleTimeString(`es-AR`,{hour:`2-digit`,minute:`2-digit`})}</div>
       </div>
-    `).join(``)}document.getElementById(`btn-scan`).onclick=async()=>{let e=i.value.trim();if(!e){$(`Ingresá un token`);return}let t=document.getElementById(`btn-scan`);t.disabled=!0,t.textContent=`Validando...`,a.classList.add(`hidden`),o.classList.add(`hidden`);let r=await Bi(e,n.id);if(!r.valid){document.getElementById(`sr-err-msg`).textContent=r.error,o.classList.remove(`hidden`),t.disabled=!1,t.textContent=`Validar`;return}let c=r.customer,l=await Vi(r.tokenData.id,c.id,n.id,n.points_per_visit||10);if(l!==null){let e=c.name.split(` `).map(e=>e[0]).join(``).slice(0,2).toUpperCase();document.getElementById(`sr-avatar`).textContent=e,document.getElementById(`sr-name`).textContent=c.name,document.getElementById(`sr-meta`).textContent=`Total: ${l} pts`,document.getElementById(`sr-pts`).textContent=`✓ +${n.points_per_visit} puntos acreditados automáticamente.`,a.classList.remove(`hidden`),$(`✓ Puntos acreditados a ${c.name}`),i.value=``,s()}else $(`Error al acreditar puntos`,`error`);t.disabled=!1,t.textContent=`Validar`},i.addEventListener(`keydown`,e=>{e.key===`Enter`&&document.getElementById(`btn-scan`).click()}),document.getElementById(`btn-cancel`).onclick=()=>{a.classList.add(`hidden`)};let c=document.getElementById(`btn-confirm`);c&&(c.style.display=`none`),s();let l=document.getElementById(`btn-toggle-cam`),u=!1;async function d(){try{r=new Pa(`qr-reader`),await r.start({facingMode:`environment`},{fps:10,qrbox:{width:250,height:250}},e=>{i.value=e,document.getElementById(`btn-scan`).click(),f()},e=>{}),u=!0,l.textContent=`Detener Cámara`,l.classList.replace(`btn-secondary`,`btn-danger`)}catch(e){$(`Error al iniciar cámara. Asegurate de dar permisos.`,`error`),console.error(e)}}async function f(){if(r&&u){try{await r.stop(),r.clear()}catch(e){console.error(`Failed to stop scanner`,e)}u=!1,l.textContent=`Iniciar Cámara`,l.classList.replace(`btn-danger`,`btn-secondary`)}}l.addEventListener(`click`,()=>{u?f():d()});let p=new MutationObserver(e=>{document.body.contains(t)||(f(),p.disconnect())});p.observe(document.body,{childList:!0,subtree:!0}),window.location.hash.includes(`cam=1`)&&(setTimeout(d,300),window.history.replaceState(null,``,`#/scanner`))}async function co(e,t,{biz:n}){let r=[];async function i(){let{data:e,error:t}=await Z.from(`point_transactions`).select(`
-        *,
-        customer:customers(id, name, avatar_url),
-        reward:rewards(id, name, icon)
-      `).eq(`business_id`,n.id).eq(`type`,`redeem`).order(`created_at`,{ascending:!1});if(t){console.error(`Error fetching redemptions:`,t),$(`Error al cargar canjes`,`error`);return}r=e||[],o()}async function a(e){$(`Canje verificado localmente`)}function o(){t.innerHTML=`
-      <div class="app-shell">
-        ${Mi(n,`canjes`)}
-        <main class="main-content">
-          <div class="page-header">
-            <h1 class="page-title">Canjes de Premios</h1>
-            <p class="text-muted">Lista de recompensas solicitadas por tus clientes.</p>
+    `).join(``)}document.getElementById(`btn-scan`).onclick=async()=>{let e=i.value.trim();if(!e){$(`Ingresá un token`);return}let t=document.getElementById(`btn-scan`);t.disabled=!0,t.textContent=`Validando...`,a.classList.add(`hidden`),o.classList.add(`hidden`);let r=await Bi(e,n.id);if(!r.valid){document.getElementById(`sr-err-msg`).textContent=r.error,o.classList.remove(`hidden`),t.disabled=!1,t.textContent=`Validar`;return}let c=r.customer,l=await Vi(r.tokenData.id,c.id,n.id,n.points_per_visit||10);if(l!==null){let e=c.name.split(` `).map(e=>e[0]).join(``).slice(0,2).toUpperCase();document.getElementById(`sr-avatar`).textContent=e,document.getElementById(`sr-name`).textContent=c.name,document.getElementById(`sr-meta`).textContent=`Total: ${l} pts`,document.getElementById(`sr-pts`).textContent=`✓ +${n.points_per_visit} puntos acreditados automáticamente.`,a.classList.remove(`hidden`),$(`✓ Puntos acreditados a ${c.name}`),i.value=``,s()}else $(`Error al acreditar puntos`,`error`);t.disabled=!1,t.textContent=`Validar`},i.addEventListener(`keydown`,e=>{e.key===`Enter`&&document.getElementById(`btn-scan`).click()}),document.getElementById(`btn-cancel`).onclick=()=>{a.classList.add(`hidden`)};let c=document.getElementById(`btn-confirm`);c&&(c.style.display=`none`),s();let l=document.getElementById(`btn-toggle-cam`),u=!1;async function d(){try{r=new Pa(`qr-reader`),await r.start({facingMode:`environment`},{fps:10,qrbox:{width:250,height:250}},e=>{i.value=e,document.getElementById(`btn-scan`).click(),f()},e=>{}),u=!0,l.textContent=`Detener Cámara`,l.classList.replace(`btn-secondary`,`btn-danger`)}catch(e){$(`Error al iniciar cámara. Asegurate de dar permisos.`,`error`),console.error(e)}}async function f(){if(r&&u){try{await r.stop(),r.clear()}catch(e){console.error(`Failed to stop scanner`,e)}u=!1,l.textContent=`Iniciar Cámara`,l.classList.replace(`btn-danger`,`btn-secondary`)}}l.addEventListener(`click`,()=>{u?f():d()});let p=new MutationObserver(e=>{document.body.contains(t)||(f(),p.disconnect())});p.observe(document.body,{childList:!0,subtree:!0}),window.location.hash.includes(`cam=1`)&&(setTimeout(d,300),window.history.replaceState(null,``,`#/scanner`))}async function co(e,t,{biz:n}){t.innerHTML=`
+    <div class="app-shell">
+      ${Mi(n,`canjes`)}
+      <main class="main-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">🎟️ Canjes</h1>
+            <p class="page-subtitle">Recompensas reclamadas por tus clientes</p>
           </div>
-
-          <div class="card">
-            <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Cliente</th>
-                    <th>Premio</th>
-                    <th>Puntos</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${r.length>0?r.map(e=>`
-                    <tr>
-                      <td>
-                        <div class="flex items-center gap-2">
-                          <div class="avatar avatar-sm">${e.customer?.name?.[0]||`?`}</div>
-                          <div>
-                            <div style="font-weight:600">${e.customer?.name||`Cliente`}</div>
-                            <div class="text-xs text-muted">ID: ${e.customer?.id.slice(0,8)}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="flex items-center gap-2">
-                          <span>${e.reward?.icon||`🎁`}</span>
-                          <span>${e.reward?.name||`Recompensa eliminada`}</span>
-                        </div>
-                      </td>
-                      <td>
-                        <span class="badge" style="background:rgba(239,68,68,0.1);color:rgb(239,68,68)">
-                          ${e.points} pts
-                        </span>
-                      </td>
-                      <td class="text-sm">
-                        ${new Date(e.created_at).toLocaleDateString(`es-AR`)} 
-                        <br/>
-                        <span class="text-xs text-muted">${new Date(e.created_at).toLocaleTimeString(`es-AR`,{hour:`2-digit`,minute:`2-digit`})}</span>
-                      </td>
-                      <td>
-                        <button class="btn btn-ghost btn-sm btn-verify" data-id="${e.id}">Verificar</button>
-                      </td>
-                    </tr>
-                  `).join(``):`
-                    <tr>
-                      <td colspan="5" style="text-align:center;padding:3rem">
-                        <div style="font-size:2.5rem;margin-bottom:1rem">🎟️</div>
-                        <p class="text-muted">No hay canjes registrados aún.</p>
-                      </td>
-                    </tr>
-                  `}
-                </tbody>
-              </table>
+        </div>
+        <div id="canjes-container">
+          <p class="text-muted text-sm">Cargando...</p>
+        </div>
+      </main>
+    </div>
+  `;let{data:r,error:i}=await Z.from(`point_transactions`).select(`
+      id,
+      points,
+      type,
+      created_at,
+      note,
+      customer:customers ( id, name ),
+      reward:rewards ( id, name, icon )
+    `).eq(`business_id`,n.id).eq(`type`,`redeem`).order(`created_at`,{ascending:!1}),a=document.getElementById(`canjes-container`);if(!a)return;if(i){console.error(`[Canjes] Error fetching:`,i),a.innerHTML=`<p class="text-muted">Error al cargar los canjes: ${i.message}</p>`;return}let o=r||[];if(o.length===0){a.innerHTML=`
+      <div class="card" style="text-align:center;padding:4rem 2rem">
+        <div style="font-size:3rem;margin-bottom:1rem">🎟️</div>
+        <h3 style="margin-bottom:.5rem">Sin canjes todavía</h3>
+        <p class="text-muted text-sm">Cuando tus clientes canjeen premios, aparecerán aquí.</p>
+      </div>
+    `;return}a.innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:.75rem">
+      ${o.map(e=>`
+        <div class="card canje-card" style="padding:1rem 1.25rem">
+          <div class="canje-row">
+            <div class="flex items-center gap-2">
+              <div class="avatar avatar-sm" style="flex-shrink:0">${e.customer?.name?.[0]?.toUpperCase()||`?`}</div>
+              <div>
+                <div style="font-weight:700;font-size:.9rem">${e.customer?.name||`Cliente`}</div>
+                <div class="text-xs text-muted">${new Date(e.created_at).toLocaleDateString(`es-AR`)} · ${new Date(e.created_at).toLocaleTimeString(`es-AR`,{hour:`2-digit`,minute:`2-digit`})}</div>
+              </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:1.1rem">${e.reward?.icon||`🎁`} <strong>${e.reward?.name||`Premio`}</strong></div>
+              <div style="font-size:.8rem;color:var(--error);font-weight:600">${e.points} pts</div>
             </div>
           </div>
-        </main>
-      </div>
-    `,document.querySelectorAll(`.btn-verify`).forEach(e=>{e.onclick=()=>a(e.dataset.id)})}i()}async function lo(e,t,{biz:n}){let r=n.plan===`freemium`,{data:i}=await Z.from(`customers`).select(`id, status, name, last_visit_at, points`).eq(`business_id`,n.id);i||=[];let a=i.filter(e=>e.last_visit_at?Date.now()-new Date(e.last_visit_at)>30*864e5:!0),o=await Z.from(`rewards`).select(`points_required`).eq(`business_id`,n.id),s=Math.min(...(o.data||[{points_required:100}]).map(e=>e.points_required)),c=i.filter(e=>e.points>=s*.7&&e.points<s),l=[{id:`all`,label:`Todos (${i.length})`,ids:i.map(e=>e.id)},{id:`active`,label:`Activos (${i.filter(e=>e.status===`active`).length})`,ids:i.filter(e=>e.status===`active`).map(e=>e.id)},{id:`inactive`,label:`Inactivos +30d (${a.length})`,ids:a.map(e=>e.id)},{id:`near`,label:`Cerca de canjear (${c.length})`,ids:c.map(e=>e.id)}],u=`all`;t.innerHTML=`
+        </div>
+      `).join(``)}
+    </div>
+
+    <div style="margin-top:1rem;text-align:center">
+      <p class="text-xs text-muted">${o.length} canje${o.length===1?``:`s`} registrado${o.length===1?``:`s`}</p>
+    </div>
+  `}async function lo(e,t,{biz:n}){let r=n.plan===`freemium`,{data:i}=await Z.from(`customers`).select(`id, status, name, last_visit_at, points`).eq(`business_id`,n.id);i||=[];let a=i.filter(e=>e.last_visit_at?Date.now()-new Date(e.last_visit_at)>30*864e5:!0),o=await Z.from(`rewards`).select(`points_required`).eq(`business_id`,n.id),s=Math.min(...(o.data||[{points_required:100}]).map(e=>e.points_required)),c=i.filter(e=>e.points>=s*.7&&e.points<s),l=[{id:`all`,label:`Todos (${i.length})`,ids:i.map(e=>e.id)},{id:`active`,label:`Activos (${i.filter(e=>e.status===`active`).length})`,ids:i.filter(e=>e.status===`active`).map(e=>e.id)},{id:`inactive`,label:`Inactivos +30d (${a.length})`,ids:a.map(e=>e.id)},{id:`near`,label:`Cerca de canjear (${c.length})`,ids:c.map(e=>e.id)}],u=`all`;t.innerHTML=`
     <div class="app-shell">
       ${Mi(n,`notificaciones`)}
       <main class="main-content">
@@ -909,4 +891,4 @@ Minimum version required to store current data is: `+c+`.
         `).join(``)||`<p class="text-muted text-sm">Sin visitas aún.</p>`}
       </div>
     </div>
-  `;let u=r.qr_ttl_seconds||90,d=null;async function f(){let e=await zi(r.id,i.id,u),t=document.getElementById(`qr-canvas`),n=document.getElementById(`qr-token-txt`);t&&(e?(await Vo.toCanvas(t,e,{width:180,color:{dark:`#0a0a0a`,light:`#ffffff`}}),n&&(n.textContent=e)):n&&(n.textContent=`Error generando QR`))}function p(){clearInterval(d),document.getElementById(`qr-overlay`)?.classList.add(`hidden`),u=r.qr_ttl_seconds||90,document.getElementById(`qr-countdown`).textContent=u,d=setInterval(()=>{u--;let e=document.getElementById(`qr-countdown`);e&&(e.textContent=u),u<=0&&(clearInterval(d),document.getElementById(`qr-overlay`)?.classList.remove(`hidden`))},1e3)}async function m(){await f(),p()}document.getElementById(`btn-renew`)?.addEventListener(`click`,m),document.querySelectorAll(`.cr-btn[data-reward-id]`).forEach(o=>{o.onclick=async()=>{let s=parseInt(o.dataset.rewardPts),c=o.dataset.rewardName;if(!confirm(`¿Canjear "${c}" por ${s} puntos?`))return;let{error:l}=await Z.from(`customers`).update({points:i.points-s}).eq(`id`,i.id);l||(await Z.from(`point_transactions`).insert({business_id:r.id,customer_id:i.id,type:`redeem`,points:-s,reward_id:o.dataset.rewardId}),await Z.from(`rewards`).update({total_redeemed:(a.find(e=>e.id===o.dataset.rewardId)?.total_redeemed||0)+1}).eq(`id`,o.dataset.rewardId),alert(`¡Canjeaste "${c}"! Mostrá este mensaje al negocio. 🎁`),Ho({slug:e,customerId:t},n))}}),m()}var Uo=`modulepreload`,Wo=function(e){return`/`+e},Go={},Ko=function(e,t,n){let r=Promise.resolve();if(t&&t.length>0){let e=document.getElementsByTagName(`link`),i=document.querySelector(`meta[property=csp-nonce]`),a=i?.nonce||i?.getAttribute(`nonce`);function o(e){return Promise.all(e.map(e=>Promise.resolve(e).then(e=>({status:`fulfilled`,value:e}),e=>({status:`rejected`,reason:e}))))}r=o(t.map(t=>{if(t=Wo(t,n),t in Go)return;Go[t]=!0;let r=t.endsWith(`.css`),i=r?`[rel="stylesheet"]`:``;if(n)for(let n=e.length-1;n>=0;n--){let i=e[n];if(i.href===t&&(!r||i.rel===`stylesheet`))return}else if(document.querySelector(`link[href="${t}"]${i}`))return;let o=document.createElement(`link`);if(o.rel=r?`stylesheet`:Uo,r||(o.as=`script`),o.crossOrigin=``,o.href=t,a&&o.setAttribute(`nonce`,a),document.head.appendChild(o),r)return new Promise((e,n)=>{o.addEventListener(`load`,e),o.addEventListener(`error`,()=>n(Error(`Unable to preload CSS for ${t}`)))})}))}function i(e){let t=new Event(`vite:preloadError`,{cancelable:!0});if(t.payload=e,window.dispatchEvent(t),!t.defaultPrevented)throw e}return r.then(t=>{for(let e of t||[])e.status===`rejected`&&i(e.reason);return e().catch(i)})};function $(e,t=`default`){let n=document.getElementById(`global-toast`);n||(n=document.createElement(`div`),n.id=`global-toast`,n.className=`toast`,document.body.appendChild(n)),n.textContent=e,n.className=`toast show ${t}`,clearTimeout(n._timeout),n._timeout=setTimeout(()=>n.classList.remove(`show`),2800)}function qo(e){return async(t,n)=>{let r=await Ci();if(!r){f(`/login`);return}let i=await wi();if(!i){f(`/onboarding`);return}await e(t,n,{user:r,biz:i})}}function Jo(e){return async(t,n)=>{let r=await Ci();if(!r){f(`/login`);return}await e(t,n,{user:r,profiles:await Ti()})}}u(``,(e,t)=>Ei(t)),u(`/`,(e,t)=>Ei(t)),u(`login`,(e,t)=>Di(t)),u(`onboarding`,async(e,t)=>{let n=await Ci();if(!n){f(`/login`);return}if(await wi()){f(`/dashboard`);return}Ai(t,n)}),u(`dashboard`,qo(Pi)),u(`clientes`,qo(Ii)),u(`recompensas`,qo(Li)),u(`canjes`,qo(co)),u(`scanner`,qo(so)),u(`notificaciones`,qo(lo)),u(`config`,qo(fo)),u(`mi-cuenta`,Jo(async(e,t,n)=>{let{renderClientDashboard:r}=await Ko(async()=>{let{renderClientDashboard:e}=await import(`./client-dashboard-ClUyRA0g.js`);return{renderClientDashboard:e}},[]);r(e,t,n)})),u(`c/:slug/:customerId`,(e,t)=>Ho(e,t)),u(`join/:slug`,async(e,t)=>{let{renderJoin:n}=await Ko(async()=>{let{renderJoin:e}=await import(`./join-D7avxowV.js`);return{renderJoin:e}},[]);n(e,t)}),Z.auth.onAuthStateChange(e=>{e===`SIGNED_OUT`&&(window.location.hash=`/`)}),p();export{Z as a,Ci as i,Bo as n,f as o,zi as r,c as s,$ as t};
+  `;let u=r.qr_ttl_seconds||90,d=null;async function f(){let e=await zi(r.id,i.id,u),t=document.getElementById(`qr-canvas`),n=document.getElementById(`qr-token-txt`);t&&(e?(await Vo.toCanvas(t,e,{width:180,color:{dark:`#0a0a0a`,light:`#ffffff`}}),n&&(n.textContent=e)):n&&(n.textContent=`Error generando QR`))}function p(){clearInterval(d),document.getElementById(`qr-overlay`)?.classList.add(`hidden`),u=r.qr_ttl_seconds||90,document.getElementById(`qr-countdown`).textContent=u,d=setInterval(()=>{u--;let e=document.getElementById(`qr-countdown`);e&&(e.textContent=u),u<=0&&(clearInterval(d),document.getElementById(`qr-overlay`)?.classList.remove(`hidden`))},1e3)}async function m(){await f(),p()}document.getElementById(`btn-renew`)?.addEventListener(`click`,m),document.querySelectorAll(`.cr-btn[data-reward-id]`).forEach(o=>{o.onclick=async()=>{let s=parseInt(o.dataset.rewardPts),c=o.dataset.rewardName;if(!confirm(`¿Canjear "${c}" por ${s} puntos?`))return;let{error:l}=await Z.from(`customers`).update({points:i.points-s}).eq(`id`,i.id);l||(await Z.from(`point_transactions`).insert({business_id:r.id,customer_id:i.id,type:`redeem`,points:-s,reward_id:o.dataset.rewardId}),await Z.from(`rewards`).update({total_redeemed:(a.find(e=>e.id===o.dataset.rewardId)?.total_redeemed||0)+1}).eq(`id`,o.dataset.rewardId),alert(`¡Canjeaste "${c}"! Mostrá este mensaje al negocio. 🎁`),Ho({slug:e,customerId:t},n))}}),m()}var Uo=`modulepreload`,Wo=function(e){return`/`+e},Go={},Ko=function(e,t,n){let r=Promise.resolve();if(t&&t.length>0){let e=document.getElementsByTagName(`link`),i=document.querySelector(`meta[property=csp-nonce]`),a=i?.nonce||i?.getAttribute(`nonce`);function o(e){return Promise.all(e.map(e=>Promise.resolve(e).then(e=>({status:`fulfilled`,value:e}),e=>({status:`rejected`,reason:e}))))}r=o(t.map(t=>{if(t=Wo(t,n),t in Go)return;Go[t]=!0;let r=t.endsWith(`.css`),i=r?`[rel="stylesheet"]`:``;if(n)for(let n=e.length-1;n>=0;n--){let i=e[n];if(i.href===t&&(!r||i.rel===`stylesheet`))return}else if(document.querySelector(`link[href="${t}"]${i}`))return;let o=document.createElement(`link`);if(o.rel=r?`stylesheet`:Uo,r||(o.as=`script`),o.crossOrigin=``,o.href=t,a&&o.setAttribute(`nonce`,a),document.head.appendChild(o),r)return new Promise((e,n)=>{o.addEventListener(`load`,e),o.addEventListener(`error`,()=>n(Error(`Unable to preload CSS for ${t}`)))})}))}function i(e){let t=new Event(`vite:preloadError`,{cancelable:!0});if(t.payload=e,window.dispatchEvent(t),!t.defaultPrevented)throw e}return r.then(t=>{for(let e of t||[])e.status===`rejected`&&i(e.reason);return e().catch(i)})};function $(e,t=`default`){let n=document.getElementById(`global-toast`);n||(n=document.createElement(`div`),n.id=`global-toast`,n.className=`toast`,document.body.appendChild(n)),n.textContent=e,n.className=`toast show ${t}`,clearTimeout(n._timeout),n._timeout=setTimeout(()=>n.classList.remove(`show`),2800)}function qo(e){return async(t,n)=>{let r=await Ci();if(!r){f(`/login`);return}let i=await wi();if(!i){f(`/onboarding`);return}await e(t,n,{user:r,biz:i})}}function Jo(e){return async(t,n)=>{let r=await Ci();if(!r){f(`/login`);return}await e(t,n,{user:r,profiles:await Ti()})}}u(``,(e,t)=>Ei(t)),u(`/`,(e,t)=>Ei(t)),u(`login`,(e,t)=>Di(t)),u(`onboarding`,async(e,t)=>{let n=await Ci();if(!n){f(`/login`);return}if(await wi()){f(`/dashboard`);return}Ai(t,n)}),u(`dashboard`,qo(Pi)),u(`clientes`,qo(Ii)),u(`recompensas`,qo(Li)),u(`canjes`,qo(co)),u(`scanner`,qo(so)),u(`notificaciones`,qo(lo)),u(`config`,qo(fo)),u(`mi-cuenta`,Jo(async(e,t,n)=>{let{renderClientDashboard:r}=await Ko(async()=>{let{renderClientDashboard:e}=await import(`./client-dashboard-CqQdhyAS.js`);return{renderClientDashboard:e}},[]);r(e,t,n)})),u(`c/:slug/:customerId`,(e,t)=>Ho(e,t)),u(`join/:slug`,async(e,t)=>{let{renderJoin:n}=await Ko(async()=>{let{renderJoin:e}=await import(`./join-D1gSNSec.js`);return{renderJoin:e}},[]);n(e,t)}),Z.auth.onAuthStateChange(e=>{e===`SIGNED_OUT`&&(window.location.hash=`/`)}),p();export{Z as a,Ci as i,Bo as n,f as o,zi as r,c as s,$ as t};

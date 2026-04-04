@@ -1,4 +1,4 @@
-import{a as e,n as t,o as n,r,s as i,t as a}from"./index-CglxGC5j.js";var o=i(t(),1);async function s(t,i,{user:s,profiles:c}){if(!c||c.length===0){i.innerHTML=`
+import{a as e,n as t,o as n,r,s as i,t as a}from"./index-DX0S3cA5.js";var o=i(t(),1);async function s(t,i,{user:s,profiles:c}){if(!c||c.length===0){i.innerHTML=`
       <div class="client-portal">
         <div class="client-portal-header">
           <div class="client-portal-user">
@@ -16,7 +16,7 @@ import{a as e,n as t,o as n,r,s as i,t as a}from"./index-CglxGC5j.js";var o=i(t(
         </div>
       </div>
     `,document.getElementById(`cp-logout`).onclick=async()=>{await e.auth.signOut(),n(`/`)};return}let l=0;async function u(){let t=c[l],s=t.business,{data:d}=await e.from(`rewards`).select(`*`).eq(`business_id`,s.id).eq(`active`,!0).order(`points_required`),f=d||[],{data:p}=await e.from(`point_transactions`).select(`*`).eq(`customer_id`,t.id).order(`created_at`,{ascending:!1}).limit(5),m=f.find(e=>e.points_required>t.points),h=m?Math.min(100,Math.round(t.points/m.points_required*100)):100;i.innerHTML=`
-      <div class="client-portal">
+      <div class="client-portal" style="padding-bottom: 5.5rem">
         <!-- Header -->
         <div class="client-portal-header">
           <div class="client-portal-user">
