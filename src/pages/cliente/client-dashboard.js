@@ -163,65 +163,68 @@ export async function renderClientDashboard(_, app, { user, profiles }) {
       btn.onclick = async () => {
         const pts = parseInt(btn.dataset.rewardPts)
         const name = btn.dataset.rewardName
+        const rewardId = btn.dataset.rewardId
         if (!confirm(`¿Canjear "${name}" por ${pts} puntos?`)) return
 
-        // 1. Disable immediately to prevent double-tap
+        // 1. Disable immediately — prevents double-tap
         btn.disabled = true
         btn.textContent = 'Canjeando...'
 
-        // 2. Re-fetch FRESH points from DB to prevent race conditions
-        const { data: freshCustomer, error: fetchErr } = await supabase
+        // 2. Re-read freshest points from DB
+        const { data: fresh, error: fetchErr } = await supabase
           .from('customers')
-          .select('points')
+          .select('id, points, user_id')
           .eq('id', profile.id)
           .single()
 
-        if (fetchErr || !freshCustomer) {
-          showToast('Error al verificar puntos. Intentá de nuevo.', 'error')
-          btn.disabled = false
-          btn.textContent = '¡Canjear!'
-          return
+        if (fetchErr || !fresh) {
+          console.error('[Redeem] Fetch error:', fetchErr)
+          showToast('Error al verificar puntos.', 'error')
+          btn.disabled = false; btn.textContent = '¡Canjear!'; return
         }
 
-        // 3. Validate fresh points are still sufficient
-        if (freshCustomer.points < pts) {
-          showToast('No tenés suficientes puntos para este canje.', 'error')
-          btn.disabled = false
-          btn.textContent = `${pts - freshCustomer.points} más`
-          return
+        if (fresh.points < pts) {
+          showToast('Puntos insuficientes.', 'error')
+          btn.disabled = false; btn.textContent = `${pts - fresh.points} más`; return
         }
 
-        // 4. Deduct using the fresh value (not stale cache)
-        const newPoints = freshCustomer.points - pts
-        const { error: updateErr } = await supabase
+        const newPoints = fresh.points - pts
+
+        // 3. Update using both id AND user_id filter
+        //    (RLS policy "cust_self_update" requires user_id = auth.uid())
+        const { data: updatedRows, error: updateErr } = await supabase
           .from('customers')
           .update({ points: newPoints })
-          .eq('id', profile.id)
+          .eq('id', fresh.id)
+          .eq('user_id', fresh.user_id)   // ← matches the RLS policy
+          .select('id, points')
 
         if (updateErr) {
-          showToast('Error al canjear. Intentá de nuevo.', 'error')
-          btn.disabled = false
-          btn.textContent = '¡Canjear!'
-          return
+          console.error('[Redeem] Update RLS error:', updateErr)
+          showToast(`Error al actualizar puntos: ${updateErr.message}`, 'error')
+          btn.disabled = false; btn.textContent = '¡Canjear!'; return
         }
 
-        // 5. Log the transaction
-        await supabase.from('point_transactions').insert({
+        if (!updatedRows || updatedRows.length === 0) {
+          // RLS blocked silently — user needs to apply SQL fix in Supabase
+          console.error('[Redeem] RLS BLOCKED update — no rows affected. Apply docs/fix-rls-canjes.sql in Supabase dashboard.')
+          showToast('❌ Error de permisos. Contactá al administrador.', 'error')
+          btn.disabled = false; btn.textContent = '¡Canjear!'; return
+        }
+
+        // 4. Log transaction
+        const { error: txErr } = await supabase.from('point_transactions').insert({
           business_id: biz.id,
           customer_id: profile.id,
           type: 'redeem',
           points: -pts,
-          reward_id: btn.dataset.rewardId
+          reward_id: rewardId || null
         })
+        if (txErr) console.error('[Redeem] TX insert error:', txErr)
 
-        // 6. Refresh local profile from DB and re-render
-        const { data: updated } = await supabase
-          .from('customers')
-          .select('*, business:businesses(id, name, slug, type, logo_url, points_per_visit, qr_ttl_seconds)')
-          .eq('id', profile.id)
-          .single()
-        if (updated) profiles[activeIdx] = updated
-        showToast(`¡Canjeaste "${name}"! 🎁`)
+        // 5. Update local cache and re-render
+        profiles[activeIdx] = { ...profiles[activeIdx], points: newPoints }
+        showToast(`¡Canjeaste "${name}"! 🎁 (-${pts} pts)`)
         render()
       }
     })
