@@ -3,8 +3,11 @@ import { renderNav } from '../components/nav.js'
 import { validateQRToken, confirmQRScan } from '../lib/qr.js'
 import { showToast } from '../main.js'
 
+import { Html5Qrcode } from 'html5-qrcode'
+
 export async function renderScanner(_, app, { biz }) {
   let pendingData = null
+  let scannerInstance = null
 
   app.innerHTML = `
     <div class="app-shell">
@@ -30,7 +33,14 @@ export async function renderScanner(_, app, { biz }) {
         </div>
 
         <div class="scan-panel">
-          <div class="card-title" style="margin-bottom:.5rem">📷 Ingresar token del cliente</div>
+          <div class="card-title" style="margin-bottom:.5rem">📷 Escanear QR</div>
+          
+          <div id="qr-reader" style="width: 100%; max-width: 400px; margin: 0 auto; border-radius: var(--radius-md); overflow: hidden;"></div>
+          <div style="text-align: center; margin: 1rem 0;">
+             <button class="btn btn-secondary btn-sm" id="btn-toggle-cam">Iniciar Cámara</button>
+          </div>
+
+          <div class="card-title" style="margin: 1.5rem 0 .5rem;">...o ingresar token manual</div>
           <div class="scan-input-row">
             <input class="form-input scan-input" id="scan-input" placeholder="Ej: PEL-M1X8J3-A7F2" maxlength="25" oninput="this.value=this.value.toUpperCase()" />
             <button class="btn btn-primary" id="btn-scan">Validar</button>
@@ -152,4 +162,64 @@ export async function renderScanner(_, app, { biz }) {
   }
 
   loadTodayLog()
+
+  // --- Html5Qrcode Logic ---
+  const btnToggleCam = document.getElementById('btn-toggle-cam')
+  let isScanning = false
+
+  async function startScanner() {
+    try {
+      scannerInstance = new Html5Qrcode("qr-reader")
+      await scannerInstance.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 250, height: 250 } },
+        (decodedText) => {
+          // On success
+          scanInput.value = decodedText
+          document.getElementById('btn-scan').click()
+          stopScanner() // Optional: stop after success so they can confirm
+        },
+        (errorMessage) => {
+          // parse error, ignore
+        }
+      )
+      isScanning = true
+      btnToggleCam.textContent = 'Detener Cámara'
+      btnToggleCam.classList.replace('btn-secondary', 'btn-danger')
+    } catch (err) {
+      showToast('Error al iniciar cámara. Asegurate de dar permisos.', 'error')
+      console.error(err)
+    }
+  }
+
+  async function stopScanner() {
+    if (scannerInstance && isScanning) {
+      try {
+        await scannerInstance.stop()
+        scannerInstance.clear()
+      } catch (err) {
+        console.error('Failed to stop scanner', err)
+      }
+      isScanning = false
+      btnToggleCam.textContent = 'Iniciar Cámara'
+      btnToggleCam.classList.replace('btn-danger', 'btn-secondary')
+    }
+  }
+
+  btnToggleCam.addEventListener('click', () => {
+    if (isScanning) {
+      stopScanner()
+    } else {
+      startScanner()
+    }
+  })
+
+  // Cleanup when navigating away
+  const observer = new MutationObserver((mutations) => {
+    if (!document.body.contains(app)) {
+      stopScanner()
+      observer.disconnect()
+    }
+  })
+  observer.observe(document.body, { childList: true, subtree: true })
 }

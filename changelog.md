@@ -1,5 +1,15 @@
 # Changelog LoyaltyApp
 
+## [2026-04-03] - Lector QR con Cámara
+- **Descripción del cambio**: 
+  - Se instaló la librería `html5-qrcode`.
+  - Se modificó `src/pages/scanner.js` para incluir un lector de cámara en vivo directamente en la interfaz.
+  - El dueño de negocio ahora puede presionar "Iniciar Cámara" para leer el token del QR del cliente. Una vez leído exitosamente, el campo de token se autocompleta y se simula el click en "Validar".
+- **Motivo técnico/estético**: Facilitar el proceso de otorgamiento de puntos a los negocios sin requerir pistolas lectoras externas o tipeo manual.
+- **Pasos para revertir**: 
+  1. En `src/pages/scanner.js`, remover la importación `import { Html5Qrcode } from 'html5-qrcode'`.
+  2. Remover el elemento HTML `<div id="qr-reader">` y todo el script relacionado con la instancia de `scannerInstance` en `scanner.js`.
+  3. Desinstalar el paquete: `npm uninstall html5-qrcode`.
 ## [2026-04-04] - Registro Seguro de Clientes
 - **Descripción del cambio**: 
   - Se añadió un campo de **Contraseña** en la página de registro de clientes del negocio (`src/pages/cliente/join.js`).
