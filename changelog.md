@@ -1,5 +1,15 @@
 # Changelog LoyaltyApp
 
+## [2026-04-03] - Acreditación Automática de Puntos
+- **Descripción del cambio**: 
+  - Se eliminó el paso de confirmación manual del negocio tras escanear un QR.
+  - Al validar un token exitosamente, el sistema ahora acredita los puntos de forma inmediata (`auto-confirm`).
+  - Se muestra un mensaje de éxito con el nuevo total de puntos del cliente.
+- **Motivo técnico/estético**: Agilizar la operación en el punto de venta. Menos clics para el dueño de negocio significa un proceso más fluido.
+- **Pasos para revertir**: 
+  1. En `src/pages/scanner.js`, revertir el handler de `btn-scan` para que solo asigne `pendingData` y muestre el botón de confirmación.
+  2. Mostrar nuevamente el botón `btn-confirm`.
+
 ## [2026-04-03] - Botones Flotantes (FAB) para QRs
 - **Descripción del cambio**: 
   - Se agregó un botón flotante (`.fab-btn`) en el portal del cliente para desplazar su vista automáticamente al código QR.

@@ -6,7 +6,6 @@ import { showToast } from '../main.js'
 import { Html5Qrcode } from 'html5-qrcode'
 
 export async function renderScanner(_, app, { biz }) {
-  let pendingData = null
   let scannerInstance = null
 
   app.innerHTML = `
@@ -112,54 +111,56 @@ export async function renderScanner(_, app, { biz }) {
     const token = scanInput.value.trim()
     if (!token) { showToast('Ingresá un token'); return }
 
+    const btn = document.getElementById('btn-scan')
+    btn.disabled = true; btn.textContent = 'Validando...'
+
     scanOk.classList.add('hidden')
     scanErr.classList.add('hidden')
-    pendingData = null
 
     const result = await validateQRToken(token, biz.id)
 
     if (!result.valid) {
       document.getElementById('sr-err-msg').textContent = result.error
       scanErr.classList.remove('hidden')
+      btn.disabled = false; btn.textContent = 'Validar'
       return
     }
 
+    // Auto-confirm
     const c = result.customer
-    const initials = c.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-    document.getElementById('sr-avatar').textContent = initials
-    document.getElementById('sr-name').textContent = c.name
-    document.getElementById('sr-meta').textContent = `${c.points} puntos actuales`
-    document.getElementById('sr-pts').textContent = `Se sumarán ${biz.points_per_visit} puntos → total: ${c.points + biz.points_per_visit} pts`
-    scanOk.classList.remove('hidden')
-    pendingData = { tokenId: result.tokenData.id, customerId: c.id }
+    const newPts = await confirmQRScan(result.tokenData.id, c.id, biz.id, biz.points_per_visit || 10)
+    
+    if (newPts !== null) {
+      const initials = c.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+      document.getElementById('sr-avatar').textContent = initials
+      document.getElementById('sr-name').textContent = c.name
+      document.getElementById('sr-meta').textContent = `Total: ${newPts} pts`
+      document.getElementById('sr-pts').textContent = `✓ +${biz.points_per_visit} puntos acreditados automáticamente.`
+      scanOk.classList.remove('hidden')
+      showToast(`✓ Puntos acreditados a ${c.name}`)
+      
+      // Clear input
+      scanInput.value = ''
+      loadTodayLog()
+    } else {
+      showToast('Error al acreditar puntos', 'error')
+    }
+
+    btn.disabled = false; btn.textContent = 'Validar'
   }
 
   // Allow Enter key
   scanInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btn-scan').click() })
 
-  document.getElementById('btn-confirm').onclick = async () => {
-    if (!pendingData) return
-    const btn = document.getElementById('btn-confirm')
-    btn.disabled = true; btn.textContent = 'Guardando...'
-
-    const newPts = await confirmQRScan(pendingData.tokenId, pendingData.customerId, biz.id, biz.points_per_visit || 10)
-    if (newPts !== null) {
-      showToast(`✓ +${biz.points_per_visit} puntos sumados. Total: ${newPts}`)
-    } else {
-      showToast('Error al confirmar el escaneo', 'error')
-    }
-    scanOk.classList.add('hidden')
-    scanInput.value = ''
-    pendingData = null
-    btn.disabled = false; btn.textContent = '✓ Confirmar puntos'
-    loadTodayLog()
-  }
-
+  // Manual cancel (for showing result)
   document.getElementById('btn-cancel').onclick = () => {
     scanOk.classList.add('hidden')
-    scanInput.value = ''
-    pendingData = null
   }
+
+  // Hide the confirm button as it's now automatic
+  // We'll keep the scan-ok box for feedback but remove the confirm button
+  const confirmBtn = document.getElementById('btn-confirm')
+  if (confirmBtn) confirmBtn.style.display = 'none'
 
   loadTodayLog()
 
