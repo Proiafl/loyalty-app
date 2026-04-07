@@ -134,16 +134,28 @@ export async function renderConfig(_, app, { biz, user }) {
       try {
         // Usar el email del user ya disponible en el contexto de renderConfig
         const payerEmail = user?.email || ''
+        const { data: sessionData } = await supabase.auth.getSession()
+        const token = sessionData?.session?.access_token
+        
         console.log('[MP] Checkout → businessId:', biz.id, '| email:', payerEmail)
 
-        const { data, error } = await supabase.functions.invoke('mp-checkout', {
-          body: { businessId: biz.id, payerEmail }
+        const res = await fetch('https://qcrdbhbxcyqeyxwwhaiv.supabase.co/functions/v1/mp-checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ businessId: biz.id, payerEmail })
         })
 
-        console.log('[MP] Response → data:', JSON.stringify(data), '| error:', JSON.stringify(error))
+        const resText = await res.text()
+        console.log('[MP] Raw Response:', res.status, resText)
 
-        if (error) {
-          showToast(`Error: ${error.message}`, 'error')
+        let data = {}
+        try { data = JSON.parse(resText) } catch (e) {}
+
+        if (!res.ok) {
+          showToast(`Error: ${data.error || res.statusText}`, 'error')
           return
         }
         if (data?.init_point) {
