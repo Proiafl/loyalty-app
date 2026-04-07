@@ -18,10 +18,10 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Missing auth header' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    const { businessId, planPrice } = await req.json();
+    const { businessId, planPrice, payerEmail } = await req.json();
 
-    if (!businessId) {
-      return new Response(JSON.stringify({ error: 'Missing businessId' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    if (!businessId || !payerEmail) {
+      return new Response(JSON.stringify({ error: 'Missing businessId or payerEmail' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     const mpAccessToken = Deno.env.get('MP_ACCESS_TOKEN');
@@ -49,6 +49,7 @@ Deno.serve(async (req) => {
           transaction_amount: planPrice || 25,
           currency_id: "USD"
         },
+        payer_email: payerEmail,
         back_url: `${appUrl}/#/pago-exitoso`,
         external_reference: businessId,
         status: "pending"

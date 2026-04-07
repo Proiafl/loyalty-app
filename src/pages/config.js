@@ -128,12 +128,15 @@ export async function renderConfig(_, app, { biz, user }) {
 
   const upgradeBtn = document.getElementById('btn-upgrade')
   if (upgradeBtn) {
-    upgradeBtn.onclick = async () => {
+    const doUpgrade = async () => {
       upgradeBtn.disabled = true
       upgradeBtn.textContent = 'Procesando...'
       try {
+        const userOrigin = await supabase.auth.getUser()
+        const payerEmail = userOrigin?.data?.user?.email || ''
+        
         const { data, error } = await supabase.functions.invoke('mp-checkout', {
-          body: { businessId: biz.id, planPrice: 25 }
+          body: { businessId: biz.id, planPrice: 25, payerEmail }
         })
         if (error) throw error
         if (data && data.init_point) {
@@ -147,6 +150,12 @@ export async function renderConfig(_, app, { biz, user }) {
         upgradeBtn.disabled = false
         upgradeBtn.textContent = 'Activar Pro ⭐'
       }
+    }
+    upgradeBtn.onclick = doUpgrade
+    
+    // Auto-launch checkout if intent is present
+    if (window.location.hash.includes('action=pay')) {
+      doUpgrade()
     }
   }
 

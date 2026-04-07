@@ -144,7 +144,14 @@ export function renderOnboarding(app, user) {
       })
 
       showToast('¡Negocio creado! Bienvenido 🎉')
-      navigate('/dashboard')
+      
+      if (sessionStorage.getItem('loyaltyapp_intent_pro') === 'true') {
+        sessionStorage.removeItem('loyaltyapp_intent_pro')
+        navigate('/configuracion#action=pay')
+      } else {
+        navigate('/dashboard')
+      }
+      
     } catch (err) {
       console.error('[Onboarding]', err)
       showToast('Error creando el negocio: ' + (err.message || 'desconocido'))

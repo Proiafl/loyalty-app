@@ -194,8 +194,8 @@ export function renderLanding(app) {
   go('nav-start', '/login')
   go('hero-start', '/login')
   go('plan-free', '/login')
-  go('plan-pro', '/login')
-  go('cta-start', '/login')
+  go('plan-pro', '/login?signup=pro')
+  go('cta-start', '/login?signup=pro')
   go('demo-modal-start', '/login')
 
   // Video demo modal

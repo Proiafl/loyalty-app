@@ -3,7 +3,11 @@ import { navigate } from '../lib/router.js'
 import { showToast } from '../main.js'
 
 export function renderAuth(app) {
-  let isLogin = true
+  let isLogin = !window.location.hash.includes('signup=pro')
+  
+  if (window.location.hash.includes('signup=pro')) {
+    sessionStorage.setItem('loyaltyapp_intent_pro', 'true')
+  }
 
   function render() {
     app.innerHTML = `
