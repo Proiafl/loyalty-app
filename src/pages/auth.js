@@ -3,11 +3,9 @@ import { navigate } from '../lib/router.js'
 import { showToast } from '../main.js'
 
 export function renderAuth(app) {
-  let isLogin = !window.location.hash.includes('signup=pro')
-  
-  if (window.location.hash.includes('signup=pro')) {
-    sessionStorage.setItem('loyaltyapp_intent_pro', 'true')
-  }
+  // Si hay intent pro en sessionStorage, mostrar formulario de registro directamente
+  const hasProIntent = sessionStorage.getItem('loyaltyapp_intent_pro') === 'true'
+  let isLogin = !hasProIntent
 
   function render() {
     app.innerHTML = `

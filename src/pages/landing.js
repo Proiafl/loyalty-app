@@ -194,9 +194,33 @@ export function renderLanding(app) {
   go('nav-start', '/login')
   go('hero-start', '/login')
   go('plan-free', '/login')
-  go('plan-pro', '/login?signup=pro')
-  go('cta-start', '/login?signup=pro')
+  go('cta-start', '/login')
   go('demo-modal-start', '/login')
+
+  // Botón Plan Pro: detectar usuario activo antes de redirigir
+  document.getElementById('plan-pro')?.addEventListener('click', async () => {
+    // Importar supabase dinámicamente para no añadir dependencias al bundle del landing
+    const { supabase, getBusiness } = await import('../lib/supabase.js')
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (user) {
+      // Usuario ya autenticado → verificar si tiene negocio
+      const biz = await getBusiness()
+      if (biz) {
+        // Tiene negocio y ya está logueado → disparar pago directamente en /config
+        sessionStorage.setItem('loyaltyapp_launch_pay', 'true')
+        navigate('/config')
+      } else {
+        // Autenticado pero sin negocio → onboarding con intent pro
+        sessionStorage.setItem('loyaltyapp_intent_pro', 'true')
+        navigate('/onboarding')
+      }
+    } else {
+      // No autenticado → registro con intent pro guardada
+      sessionStorage.setItem('loyaltyapp_intent_pro', 'true')
+      navigate('/login')
+    }
+  })
 
   // Video demo modal
   const modal = document.getElementById('demo-modal')

@@ -147,7 +147,8 @@ export function renderOnboarding(app, user) {
       
       if (sessionStorage.getItem('loyaltyapp_intent_pro') === 'true') {
         sessionStorage.removeItem('loyaltyapp_intent_pro')
-        navigate('/configuracion#action=pay')
+        sessionStorage.setItem('loyaltyapp_launch_pay', 'true')
+        navigate('/config')
       } else {
         navigate('/dashboard')
       }

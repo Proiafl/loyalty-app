@@ -153,8 +153,9 @@ export async function renderConfig(_, app, { biz, user }) {
     }
     upgradeBtn.onclick = doUpgrade
     
-    // Auto-launch checkout if intent is present
-    if (window.location.hash.includes('action=pay')) {
+    // Auto-launch checkout if intent is present (set by onboarding Pro flow)
+    if (sessionStorage.getItem('loyaltyapp_launch_pay') === 'true') {
+      sessionStorage.removeItem('loyaltyapp_launch_pay')
       doUpgrade()
     }
   }
