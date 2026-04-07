@@ -1,5 +1,18 @@
 # Changelog LoyaltyApp
 
+## [2026-04-07] - Integración MercadoPago Pro y Video Demo
+- **Descripción del cambio**: 
+  - Se habilitó la pasarela de pagos con **MercadoPago** configurando la `PUBLIC_KEY` en el frontend y el `ACCESS_TOKEN` secreto en las Edge Functions de Supabase.
+  - Se actualizó la Edge Function `mp-checkout` para usar el precio de **$25 USD** y redireccionar a las nuevas páginas de confirmación de pago.
+  - Se creó la página `src/pages/payment-result.js` para manejar los estados de éxito, pendiente y error de pago, con animaciones y confirmación de desbloqueo de funcionalidades Pro.
+  - Se agregó un **Video Demo** (`public/demo_loyaltyapp.mp4`) accionable desde un modal en el botón "Ver demo" de la Landing Page.
+  - Se añadió el branding **"Powered by futuwebs.com"** en la Landing Page (hero, footer) y en el panel de control del negocio (sidebar).
+- **Motivo técnico/estético**: Habilitar el modelo de negocio SAAS mediante cobros reales y mejorar la conversión mediante una demo visual. Refuerzo de marca industrial mediante branding de Futuwebs.
+- **Pasos para revertir**: 
+  1. Eliminar `src/pages/payment-result.js` y sus rutas en `main.js`.
+  2. Revertir `landing.js` y `nav.js` para quitar modales y branding.
+  3. Desactivar variables de entorno en `.env` y secretos en Supabase.
+
 ## [2026-04-03] - Módulo de Canjes y Débito de Puntos
 - **Descripción del cambio**: 
   - Se creó la sección **"Canjes"** en el panel del dueño de negocio, permitiendo ver una lista histórica de premios reclamados por los clientes.

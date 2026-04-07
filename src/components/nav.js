@@ -35,6 +35,11 @@ export function renderNav(biz, activeId) {
           <div class="biz-badge-type">${biz.type || ''}</div>
           <span class="plan-badge ${biz.plan}">${biz.plan === 'pro' ? '⭐ Pro' : 'Freemium'}</span>
         </div>
+        <div style="text-align:center;margin-top:.75rem">
+          <a href="https://futuwebs.com" target="_blank" rel="noopener" style="font-size:.65rem;color:var(--on-surface-muted);text-decoration:none;opacity:.5;transition:opacity .2s;font-family:var(--font-display);font-weight:600;letter-spacing:.05em" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.5'">
+            by FUTUWEBS.COM
+          </a>
+        </div>
       </div>
     </aside>
 

@@ -27,7 +27,16 @@ export function renderLanding(app) {
             <button class="btn btn-primary btn-lg" id="hero-start">
               Empezar gratis — 0 costo
             </button>
-            <button class="btn btn-lg" id="hero-demo" style="border:1px solid var(--surface-border);color:var(--on-surface)">Ver demo ▶</button>
+            <button class="btn btn-lg" id="hero-demo" style="border:1px solid var(--surface-border);color:var(--on-surface);display:inline-flex;align-items:center;gap:.5rem">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              Ver demo
+            </button>
+          </div>
+          <div style="margin-top:1.5rem">
+            <a href="https://futuwebs.com" target="_blank" rel="noopener" style="font-size:.75rem;color:var(--on-surface-muted);display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;opacity:.7;transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.7'">
+              <span>Powered by</span>
+              <span style="color:var(--primary);font-weight:700;font-family:var(--font-display)">FUTUWEBS</span>
+            </a>
           </div>
         </div>
       </section>
@@ -153,7 +162,29 @@ export function renderLanding(app) {
       <footer style="background:var(--bg-elevated);border-top:1px solid var(--surface-border);color:var(--on-surface-muted);padding:2rem 1.5rem;text-align:center;font-size:.8rem">
         <p style="font-family:var(--font-display);font-weight:700;color:var(--primary);margin-bottom:.5rem">LoyaltyApp</p>
         <p>© ${new Date().getFullYear()} LoyaltyApp. Sistema de fidelización para negocios.</p>
+        <p style="margin-top:.75rem">
+          Desarrollado con 💛 por 
+          <a href="https://futuwebs.com" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;font-family:var(--font-display);text-decoration:none">futuwebs.com</a>
+        </p>
       </footer>
+    </div>
+
+    <!-- VIDEO DEMO MODAL -->
+    <div id="demo-modal" class="modal-bg" style="display:none;z-index:2000" onclick="if(event.target===this){this.style.display='none';document.getElementById('demo-video').pause();}">
+      <div style="background:var(--bg-elevated);border:1px solid var(--surface-border);border-radius:var(--radius-xl);padding:1.5rem;max-width:860px;width:95%;box-shadow:0 24px 60px rgba(0,0,0,.8);animation:slideUp .25s ease;position:relative">
+        <button id="demo-modal-close" style="position:absolute;top:1rem;right:1rem;background:var(--surface);border:1px solid var(--surface-border);color:var(--on-surface);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;z-index:10">✕</button>
+        <div style="margin-bottom:1rem">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:1.1rem">Demo — LoyaltyApp en acción</div>
+          <div style="font-size:.8rem;color:var(--on-surface-muted);margin-top:.2rem">Sistema de fidelización por puntos QR para negocios · <a href="https://futuwebs.com" target="_blank" style="color:var(--primary);font-weight:600;text-decoration:none">futuwebs.com</a></div>
+        </div>
+        <video id="demo-video" controls style="width:100%;border-radius:var(--radius-lg);background:#000;max-height:70vh" preload="metadata">
+          <source src="/demo_loyaltyapp.mp4" type="video/mp4">
+          Tu navegador no soporta video HTML5.
+        </video>
+        <div style="margin-top:1rem;text-align:center">
+          <button class="btn btn-primary" id="demo-modal-start">Empezar gratis ahora ✨</button>
+        </div>
+      </div>
     </div>
   `
 
@@ -165,4 +196,20 @@ export function renderLanding(app) {
   go('plan-free', '/login')
   go('plan-pro', '/login')
   go('cta-start', '/login')
+  go('demo-modal-start', '/login')
+
+  // Video demo modal
+  const modal = document.getElementById('demo-modal')
+  const video = document.getElementById('demo-video')
+
+  document.getElementById('hero-demo').addEventListener('click', () => {
+    modal.style.display = 'flex'
+    video.currentTime = 0
+    video.play().catch(() => {})
+  })
+
+  document.getElementById('demo-modal-close').addEventListener('click', () => {
+    modal.style.display = 'none'
+    video.pause()
+  })
 }

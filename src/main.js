@@ -12,6 +12,7 @@ import { renderCanjes } from './pages/canjes.js'
 import { renderNotificaciones } from './pages/notificaciones.js'
 import { renderConfig } from './pages/config.js'
 import { renderClientCard } from './pages/cliente/card.js'
+import { renderPaymentSuccess } from './pages/payment-result.js'
 
 // ── Toast global
 export function showToast(msg, type = 'default') {
@@ -82,6 +83,11 @@ route('join/:slug', async (params, app) => {
   const { renderJoin } = await import('./pages/cliente/join.js')
   renderJoin(params, app)
 })
+
+// ── Payment result routes (MercadoPago callbacks)
+route('pago-exitoso', (params, app) => renderPaymentSuccess(params, app))
+route('pago-pendiente', (params, app) => renderPaymentSuccess(params, app))
+route('pago-error', (params, app) => renderPaymentSuccess(params, app))
 
 // Auth listener
 supabase.auth.onAuthStateChange((event) => {

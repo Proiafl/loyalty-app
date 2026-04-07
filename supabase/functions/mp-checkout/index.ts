@@ -29,7 +29,11 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: 'MercadoPago not configured' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    // Usar API de Preapproval para suscripciones
+    // Determine app base URL dynamically
+    const origin = req.headers.get('origin') || 'https://loyaltyapp.futuwebs.com';
+    const appUrl = origin.includes('localhost') ? 'http://localhost:5173' : origin;
+
+    // Usar API de Preapproval para suscripciones recurrentes MP
     const response = await fetch('https://api.mercadopago.com/preapproval', {
       method: 'POST',
       headers: {
@@ -37,15 +41,15 @@ Deno.serve(async (req) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        reason: "LoyaltyApp Pro - Suscripción Mensual",
+        reason: "LoyaltyApp Pro — Suscripción Mensual",
         auto_recurring: {
           frequency: 1,
           frequency_type: "months",
           start_date: new Date().toISOString(),
-          transaction_amount: planPrice || 5000,
-          currency_id: "ARS"
+          transaction_amount: planPrice || 25,
+          currency_id: "USD"
         },
-        back_url: "https://miapp.com/#/config",
+        back_url: `${appUrl}/#/pago-exitoso`,
         external_reference: businessId,
         status: "pending"
       })
@@ -54,9 +58,11 @@ Deno.serve(async (req) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('Error from MercadoPago:', data);
+      console.error('Error from MercadoPago:', JSON.stringify(data));
       return new Response(JSON.stringify({ error: 'Error generating subscription', details: data }), { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
+
+    console.log('Preapproval created:', data.id, 'for business:', businessId);
 
     return new Response(JSON.stringify({ init_point: data.init_point }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
