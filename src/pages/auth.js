@@ -94,7 +94,7 @@ export function renderAuth(app) {
  * - Neither → onboarding (new business owner)
  */
 async function redirectByRole(isNewSignup = false) {
-  // Check if there's a pending join redirect
+  // Check if there's a pending join redirect (cliente escaneó QR)
   const pendingJoin = sessionStorage.getItem('loyaltyapp_join_slug')
   if (pendingJoin) {
     sessionStorage.removeItem('loyaltyapp_join_slug')
@@ -102,10 +102,19 @@ async function redirectByRole(isNewSignup = false) {
     return
   }
 
+  const hasProIntent = sessionStorage.getItem('loyaltyapp_intent_pro') === 'true'
+
   // Check if business owner
   const biz = await getBusiness()
   if (biz) {
-    navigate('/dashboard')
+    if (hasProIntent) {
+      // Tiene negocio y quiere activar Pro → ir directo a config con flag de pago
+      sessionStorage.removeItem('loyaltyapp_intent_pro')
+      sessionStorage.setItem('loyaltyapp_launch_pay', 'true')
+      navigate('/config')
+    } else {
+      navigate('/dashboard')
+    }
     return
   }
 
@@ -118,6 +127,6 @@ async function redirectByRole(isNewSignup = false) {
     }
   }
 
-  // New user with no role yet or intentionally registering as business → onboarding
+  // New user with no role yet → onboarding (intent pro se mantiene para después del onboarding)
   navigate('/onboarding')
 }

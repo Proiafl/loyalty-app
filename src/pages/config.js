@@ -132,20 +132,32 @@ export async function renderConfig(_, app, { biz, user }) {
       upgradeBtn.disabled = true
       upgradeBtn.textContent = 'Procesando...'
       try {
-        const userOrigin = await supabase.auth.getUser()
-        const payerEmail = userOrigin?.data?.user?.email || ''
+        const { data: userData } = await supabase.auth.getUser()
+        const payerEmail = userData?.user?.email || ''
+        
+        console.log('[MP] Starting checkout for business:', biz.id, 'email:', payerEmail)
         
         const { data, error } = await supabase.functions.invoke('mp-checkout', {
-          body: { businessId: biz.id, planPrice: 25, payerEmail }
+          body: { businessId: biz.id, payerEmail }
         })
-        if (error) throw error
+        
+        console.log('[MP] Response - data:', JSON.stringify(data), 'error:', JSON.stringify(error))
+        
+        if (error) {
+          console.error('[MP] Invoke error:', error)
+          showToast(`Error: ${error.message || JSON.stringify(error)}`, 'error')
+          return
+        }
         if (data && data.init_point) {
           window.location.href = data.init_point
+        } else if (data && data.error) {
+          showToast(`MP Error: ${data.error}`, 'error')
         } else {
-          showToast('Error de MercadoPago', 'error')
+          showToast('No se recibió link de pago', 'error')
         }
       } catch(err) {
-        showToast('Error contactando pasarela de pago', 'error')
+        console.error('[MP] Exception:', err)
+        showToast(`Error: ${err.message}`, 'error')
       } finally {
         upgradeBtn.disabled = false
         upgradeBtn.textContent = 'Activar Pro ⭐'
