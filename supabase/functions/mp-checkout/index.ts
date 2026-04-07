@@ -21,12 +21,15 @@ Deno.serve(async (req) => {
 
     const { businessId, payerEmail } = await req.json();
 
-    if (!businessId || !payerEmail) {
-      return new Response(JSON.stringify({ error: 'Missing businessId or payerEmail' }), {
+    if (!businessId) {
+      return new Response(JSON.stringify({ error: 'Missing businessId' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
+
+    // payerEmail es requerido por MP, usar fallback si no viene
+    const emailToUse = payerEmail || 'pagador@loyaltyapp.com';
 
     const mpAccessToken = Deno.env.get('MP_ACCESS_TOKEN');
     if (!mpAccessToken) {
@@ -55,7 +58,7 @@ Deno.serve(async (req) => {
           description: 'Acceso ilimitado a clientes y recompensas'
         }],
         payer: {
-          email: payerEmail
+          email: emailToUse
         },
         back_urls: {
           success: `${appUrl}/#/pago-exitoso`,

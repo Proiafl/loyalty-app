@@ -132,30 +132,28 @@ export async function renderConfig(_, app, { biz, user }) {
       upgradeBtn.disabled = true
       upgradeBtn.textContent = 'Procesando...'
       try {
-        const { data: userData } = await supabase.auth.getUser()
-        const payerEmail = userData?.user?.email || ''
-        
-        console.log('[MP] Starting checkout for business:', biz.id, 'email:', payerEmail)
-        
+        // Usar el email del user ya disponible en el contexto de renderConfig
+        const payerEmail = user?.email || ''
+        console.log('[MP] Checkout → businessId:', biz.id, '| email:', payerEmail)
+
         const { data, error } = await supabase.functions.invoke('mp-checkout', {
           body: { businessId: biz.id, payerEmail }
         })
-        
-        console.log('[MP] Response - data:', JSON.stringify(data), 'error:', JSON.stringify(error))
-        
+
+        console.log('[MP] Response → data:', JSON.stringify(data), '| error:', JSON.stringify(error))
+
         if (error) {
-          console.error('[MP] Invoke error:', error)
-          showToast(`Error: ${error.message || JSON.stringify(error)}`, 'error')
+          showToast(`Error: ${error.message}`, 'error')
           return
         }
-        if (data && data.init_point) {
+        if (data?.init_point) {
           window.location.href = data.init_point
-        } else if (data && data.error) {
-          showToast(`MP Error: ${data.error}`, 'error')
+        } else if (data?.error) {
+          showToast(`MP: ${data.error}`, 'error')
         } else {
           showToast('No se recibió link de pago', 'error')
         }
-      } catch(err) {
+      } catch (err) {
         console.error('[MP] Exception:', err)
         showToast(`Error: ${err.message}`, 'error')
       } finally {
@@ -164,8 +162,8 @@ export async function renderConfig(_, app, { biz, user }) {
       }
     }
     upgradeBtn.onclick = doUpgrade
-    
-    // Auto-launch checkout if intent is present (set by onboarding Pro flow)
+
+    // Auto-launch checkout si viene del flujo Pro (landing → login → config)
     if (sessionStorage.getItem('loyaltyapp_launch_pay') === 'true') {
       sessionStorage.removeItem('loyaltyapp_launch_pay')
       doUpgrade()
