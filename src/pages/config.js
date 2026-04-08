@@ -132,42 +132,31 @@ export async function renderConfig(_, app, { biz, user }) {
       upgradeBtn.disabled = true
       upgradeBtn.textContent = 'Procesando...'
       try {
-        // Usar el email del user ya disponible en el contexto de renderConfig
         const payerEmail = user?.email || ''
-        const { data: sessionData } = await supabase.auth.getSession()
-        const token = sessionData?.session?.access_token
-        
         console.log('[MP] Checkout → businessId:', biz.id, '| email:', payerEmail)
 
-        const res = await fetch('https://qcrdbhbxcyqeyxwwhaiv.supabase.co/functions/v1/mp-checkout', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-          },
-          body: JSON.stringify({ businessId: biz.id, payerEmail })
+        const { data, error } = await supabase.functions.invoke('mp-checkout', {
+          body: { businessId: biz.id, payerEmail }
         })
 
-        const resText = await res.text()
-        console.log('[MP] Raw Response:', res.status, resText)
+        console.log('[MP] Response → data:', data, '| error:', error)
 
-        let data = {}
-        try { data = JSON.parse(resText) } catch (e) {}
-
-        if (!res.ok) {
-          showToast(`Error: ${data.error || res.statusText}`, 'error')
+        if (error) {
+          console.error('[MP] Invoke Error details:', error);
+          showToast(`Error de pasarela: Revisa la consola o recarga`, 'error')
           return
         }
+        
         if (data?.init_point) {
           window.location.href = data.init_point
         } else if (data?.error) {
-          showToast(`MP: ${data.error}`, 'error')
+          showToast(`MP Error: ${data.error}`, 'error')
         } else {
           showToast('No se recibió link de pago', 'error')
         }
       } catch (err) {
         console.error('[MP] Exception:', err)
-        showToast(`Error: ${err.message}`, 'error')
+        showToast(`Error crítico: ${err.message}`, 'error')
       } finally {
         upgradeBtn.disabled = false
         upgradeBtn.textContent = 'Activar Pro ⭐'

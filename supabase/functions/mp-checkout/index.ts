@@ -10,11 +10,12 @@ Deno.serve(async (req) => {
     return new Response('ok', { headers: corsHeaders });
   }
 
-  try {
+    try {
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
+      // Envuelto en 200
       return new Response(JSON.stringify({ error: 'Missing auth header' }), {
-        status: 401,
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
@@ -22,8 +23,9 @@ Deno.serve(async (req) => {
     const { businessId, payerEmail } = await req.json();
 
     if (!businessId) {
+      // Envuelto en 200
       return new Response(JSON.stringify({ error: 'Missing businessId' }), {
-        status: 400,
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
@@ -33,8 +35,9 @@ Deno.serve(async (req) => {
 
     const mpAccessToken = Deno.env.get('MP_ACCESS_TOKEN');
     if (!mpAccessToken) {
+      // Envuelto en 200
       return new Response(JSON.stringify({ error: 'MercadoPago not configured' }), {
-        status: 500,
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
@@ -75,8 +78,9 @@ Deno.serve(async (req) => {
 
     if (!response.ok) {
       console.error('Error from MercadoPago:', JSON.stringify(data));
-      return new Response(JSON.stringify({ error: 'Error creating preference', details: data }), {
-        status: response.status,
+      // Devolver Status 200 para que supabase-js SDK no ahogue la respuesta.
+      return new Response(JSON.stringify({ error: `MP Error: ${data.message || 'Payment provider error'}`, details: data }), {
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
@@ -90,8 +94,9 @@ Deno.serve(async (req) => {
   } catch (error) {
     const err = error as Error;
     console.error(err);
+    // Devolver Status 200 para que error se lea en el body ({ data: { error: msg } })
     return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
+      status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
