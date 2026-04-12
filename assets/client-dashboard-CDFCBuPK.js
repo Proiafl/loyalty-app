@@ -1,4 +1,4 @@
-import{a as e}from"./supabase-_EgudPJk.js";import{a as t,i as n,n as r,r as i,t as a}from"./index-GPrut0yb.js";var o=t(a(),1);async function s(t,a,{user:s,profiles:c}){if(!c||c.length===0){a.innerHTML=`
+import{a as e}from"./supabase-_EgudPJk.js";import{a as t,i as n,n as r,r as i,t as a}from"./index-BHLQPJs-.js";var o=t(a(),1);async function s(t,a,{user:s,profiles:c}){if(!c||c.length===0){a.innerHTML=`
       <div class="client-portal">
         <div class="client-portal-header">
           <div class="client-portal-user">
