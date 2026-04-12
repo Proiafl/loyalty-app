@@ -1,1 +1,0 @@
-import{a as e,n as t}from"./supabase-B_Q-lGJO.js";export{t as getBusiness,e as supabase};
