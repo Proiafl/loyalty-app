@@ -1,5 +1,34 @@
 # Changelog LoyaltyApp
 
+## [2026-04-12] - Corrección de Integración de MercadoPago y Despliegue
+- **Descripción del cambio**:
+  - Se actualizó `src/lib/supabase.js` para exportar explícitamente la `anonKey`.
+  - Se actualizó el llamado a Supabase Edge Functions (`mp-checkout`) en `src/pages/config.js`, añadiendo un custom header `Authorization: Bearer + anonKey` para forzar la validación de anonKey en lugar del token del usuario (que provocaba errores 401).
+  - Se generó el build de producción (`npm run build`).
+  - Se actualiza el despliegue a Hostinger empujando la carpeta `dist` a la rama `deploy` (`git subtree`).
+- **Motivo técnico/estético**: Resolver el error HTTP 401 en el Checkout de MercadoPago debido a validaciones no coincidentes de JWT y cumplir el protocolo estricto "Hostinger Fix".
+- **Pasos para revertir**:
+  - En `src/pages/config.js`, remover el param `{ headers: { Authorization: ... } }` de `supabase.functions.invoke`.
+  - En `src/lib/supabase.js`, restaurar `anonKey` a una constante no exportada.
+
+## [2026-04-12] - Seguridad: Firma Webhook MP, RLS, CORS y CSP
+- **Descripción del cambio**:
+  - **`mp-webhook`**: Validación HMAC-SHA256 con `MP_WEBHOOK_SECRET`. Requests sin firma válida son rechazados con HTTP 401. Security headers en todas las respuestas.
+  - **`mp-checkout`**: CORS migrado de `'*'` a whitelist de orígenes (`ALLOWED_ORIGINS`). Rechaza métodos distintos a POST con HTTP 405. Security headers añadidos.
+  - **`index.html`**: CSP (`Content-Security-Policy`) que restringe scripts, estilos, conexiones, frames y objetos. También `X-Content-Type-Options` y `X-Frame-Options`.
+  - **RLS completo**: Archivo `docs/migration_security_rls.sql` con políticas para `businesses`, `customers`, `rewards`, `point_transactions`, `subscription_events` y `leads`. La política permisiva de `leads` reemplazada por validación de email.
+  - **Webhook MP registrado**: URL `https://qcrdbhbxcyqeyxwwhaiv.supabase.co/functions/v1/mp-webhook` con topic `payment` registrado en la app de MP.
+- **Motivo técnico**: Defensa en profundidad para producción: validación de origen, integridad de webhooks, restricción RLS por usuario, protección XSS/clickjacking.
+- **Acción pendiente**:
+  1. Ir al panel MP (Webhooks) → copiar la **secret key completa**.
+  2. Guardar en Supabase Secrets como `MP_WEBHOOK_SECRET`.
+  3. Ejecutar `docs/migration_security_rls.sql` en Supabase SQL Editor del proyecto `qcrdbhbxcyqeyxwwhaiv`.
+- **Pasos para revertir**:
+  - `mp-webhook`: eliminar `validateMPSignature` y el bloque `if (!isValid)`.
+  - `mp-checkout`: reemplazar `getCorsHeaders()` por objeto estático con `'*'`.
+  - `index.html`: eliminar los `<meta http-equiv="Content-Security-Policy">`.
+  - BD: ejecutar `DROP POLICY` para las políticas y/o `DISABLE ROW LEVEL SECURITY`.
+
 ## [2026-04-07] - Integración MercadoPago Pro y Video Demo
 - **Descripción del cambio**: 
   - Se habilitó la pasarela de pagos con **MercadoPago** configurando la `PUBLIC_KEY` en el frontend y el `ACCESS_TOKEN` secreto en las Edge Functions de Supabase.

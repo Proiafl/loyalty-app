@@ -4,6 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
+  <!-- ── Security Headers (CSP, XSS Protection) ───── -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://sdk.mercadopago.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: blob: https: http:;
+    connect-src 'self'
+      https://qcrdbhbxcyqeyxwwhaiv.supabase.co
+      https://api.mercadopago.com
+      https://api.qrserver.com;
+    frame-src https://www.mercadopago.com.ar https://www.mercadopago.com;
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    upgrade-insecure-requests;
+  " />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
   <!-- ── Primary SEO ─────────────────────────────── -->
   <title>LoyaltyApp – Sistema de Fidelización con Puntos QR para Negocios</title>
   <meta name="description" content="Fidelizá tus clientes con puntos QR sin apps que instalar. LoyaltyApp es el sistema de fidelización más simple para peluquerías, bares, cafeterías, lavaderos y más. Empezá gratis hoy." />

@@ -1,13 +1,13 @@
 import { createClient } from '@supabase/supabase-js'
 
 const url = import.meta.env.VITE_SUPABASE_URL
-const key = import.meta.env.VITE_SUPABASE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
+export const anonKey = import.meta.env.VITE_SUPABASE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!url || !key) {
+if (!url || !anonKey) {
   console.error('[Supabase] Missing env vars. Check .env file.')
 }
 
-export const supabase = createClient(url, key)
+export const supabase = createClient(url, anonKey)
 
 /** Helper: get current session user */
 export async function getUser() {

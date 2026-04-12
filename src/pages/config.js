@@ -135,8 +135,10 @@ export async function renderConfig(_, app, { biz, user }) {
         const payerEmail = user?.email || ''
         console.log('[MP] Checkout → businessId:', biz.id, '| email:', payerEmail)
 
+        const { anonKey } = await import('../lib/supabase.js')
         const { data, error } = await supabase.functions.invoke('mp-checkout', {
-          body: { businessId: biz.id, payerEmail }
+          body: { businessId: biz.id, payerEmail },
+          headers: { Authorization: 'Bearer ' + anonKey }
         })
 
         console.log('[MP] Response → data:', data, '| error:', error)
