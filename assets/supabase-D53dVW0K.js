@@ -1,1 +1,0 @@
-import{i as e,t}from"./supabase-CQ8KoLZj.js";export{t as getBusiness,e as supabase};
