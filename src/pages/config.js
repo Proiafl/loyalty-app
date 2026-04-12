@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabase.js'
 import { renderNav } from '../components/nav.js'
-import { showToast } from '../main.js'
+import { showToast } from '../lib/ui.js'
+import { showPlanModal } from '../components/planModal.js'
 
 const BIZ_TYPES = [
   { value: 'peluqueria', label: 'Peluquería' }, { value: 'bar', label: 'Bar / Café' },
@@ -128,48 +129,12 @@ export async function renderConfig(_, app, { biz, user }) {
 
   const upgradeBtn = document.getElementById('btn-upgrade')
   if (upgradeBtn) {
-    const doUpgrade = async () => {
-      upgradeBtn.disabled = true
-      upgradeBtn.textContent = 'Procesando...'
-      try {
-        const payerEmail = user?.email || ''
-        console.log('[MP] Checkout → businessId:', biz.id, '| email:', payerEmail)
+    upgradeBtn.addEventListener('click', () => showPlanModal(biz, user))
 
-        const { trueAnonKey } = await import('../lib/supabase.js')
-        const { data, error } = await supabase.functions.invoke('mp-checkout', {
-          body: { businessId: biz.id, payerEmail },
-          headers: { Authorization: 'Bearer ' + trueAnonKey }
-        })
-
-        console.log('[MP] Response → data:', data, '| error:', error)
-
-        if (error) {
-          console.error('[MP] Invoke Error details:', error);
-          showToast(`Error de pasarela: Revisa la consola o recarga`, 'error')
-          return
-        }
-        
-        if (data?.init_point) {
-          window.location.href = data.init_point
-        } else if (data?.error) {
-          showToast(`MP Error: ${data.error}`, 'error')
-        } else {
-          showToast('No se recibió link de pago', 'error')
-        }
-      } catch (err) {
-        console.error('[MP] Exception:', err)
-        showToast(`Error crítico: ${err.message}`, 'error')
-      } finally {
-        upgradeBtn.disabled = false
-        upgradeBtn.textContent = 'Activar Pro ⭐'
-      }
-    }
-    upgradeBtn.onclick = doUpgrade
-
-    // Auto-launch checkout si viene del flujo Pro (landing → login → config)
+    // Auto-launch checkout form in modal if coming from Pro intent (landing → login → config)
     if (sessionStorage.getItem('loyaltyapp_launch_pay') === 'true') {
       sessionStorage.removeItem('loyaltyapp_launch_pay')
-      doUpgrade()
+      showPlanModal(biz, user)
     }
   }
 

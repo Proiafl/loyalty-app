@@ -1,6 +1,7 @@
-import { supabase, getUser, getBusiness, getCustomerProfiles } from '../lib/supabase.js'
+import { supabase } from '../lib/supabase.js'
 import { navigate } from '../lib/router.js'
-import { showToast } from '../main.js'
+import { showToast } from '../lib/ui.js'
+import { getUser, getBusiness, getCustomerProfiles } from '../lib/supabase.js'
 
 export function renderAuth(app) {
   // Si hay intent pro en sessionStorage, mostrar formulario de registro directamente

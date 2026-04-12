@@ -108,7 +108,7 @@ export function renderLanding(app) {
         <div class="container">
           <div class="text-center">
             <div class="section-label">Precios</div>
-            <h2 class="section-title">Sin sorpresas</h2>
+            <h2 class="section-title">Planes a tu medida</h2>
           </div>
           <div class="plans-grid">
             <!-- Freemium -->
@@ -118,12 +118,9 @@ export function renderLanding(app) {
               <p class="plan-desc">Ideal para probar y arrancar</p>
               <ul class="plan-features">
                 <li>Hasta 20 clientes</li>
-                <li>2 recompensas activas</li>
+                <li>Hasta 2 recompensas</li>
                 <li>QR dinámico anti-fraude</li>
                 <li>Dashboard básico</li>
-                <li class="disabled">Analytics Avanzado</li>
-                <li class="disabled">Notificaciones</li>
-                <li class="disabled">Exportar datos</li>
               </ul>
               <button class="btn btn-secondary btn-full" id="plan-free">Empezar gratis</button>
             </div>
@@ -137,7 +134,7 @@ export function renderLanding(app) {
                 <li>Clientes ilimitados</li>
                 <li>Recompensas ilimitadas</li>
                 <li>QR dinámico anti-fraude</li>
-                <li>Dashboard + Analytics Avanzado</li>
+                <li>Dashboard con analytics</li>
                 <li>Notificaciones WhatsApp/Email</li>
                 <li>Exportar datos (CSV)</li>
               </ul>

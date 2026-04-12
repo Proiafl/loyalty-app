@@ -1,9 +1,10 @@
 import { supabase } from '../lib/supabase.js'
 import { navigate } from '../lib/router.js'
 import { renderNav } from '../components/nav.js'
-import { showToast } from '../main.js'
+import { showToast } from '../lib/ui.js'
+import { showPlanModal } from '../components/planModal.js'
 
-export async function renderDashboard(_, app, { biz }) {
+export async function renderDashboard(_, app, { biz, user }) {
   // Fetch stats
   const [clientsRes, txRes, rewardsRes] = await Promise.all([
     supabase.from('customers').select('id, status, last_visit_at').eq('business_id', biz.id),
@@ -68,7 +69,7 @@ export async function renderDashboard(_, app, { biz }) {
           </div>
           ${biz.plan === 'freemium' ? `
             <p class="text-muted text-sm my-2">Actualizá a Pro para desbloquear reportes de retención de clientes, métricas de retornos y puntos promedios en circulación.</p>
-            <button class="btn btn-secondary btn-sm mt-2" onclick="navigate('/config')">Ver planes</button>
+            <button class="btn btn-secondary btn-sm mt-2" id="btn-show-plan-modal">Ver planes</button>
           ` : `
             <div class="stats-grid mt-3">
               <div class="stat-card" style="border-color:var(--primary);background:rgba(236,253,24,.05)">
@@ -116,6 +117,13 @@ export async function renderDashboard(_, app, { biz }) {
   `
 
   document.getElementById('btn-scan-quick').onclick = () => navigate('/scanner')
+  const btnShowPlan = document.getElementById('btn-show-plan-modal')
+  if (btnShowPlan) {
+    btnShowPlan.addEventListener('click', () => {
+      console.log('[DEBUG] Ver planes button clicked')
+      showPlanModal(biz, user)
+    })
+  }
   document.getElementById('btn-copy-link').onclick = () => {
     navigator.clipboard.writeText(document.getElementById('biz-link').value)
     showToast('¡Link copiado!')

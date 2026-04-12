@@ -14,20 +14,10 @@ import { renderConfig } from './pages/config.js'
 import { renderClientCard } from './pages/cliente/card.js'
 import { renderPaymentSuccess } from './pages/payment-result.js'
 
-// ── Toast global
-export function showToast(msg, type = 'default') {
-  let t = document.getElementById('global-toast')
-  if (!t) {
-    t = document.createElement('div')
-    t.id = 'global-toast'
-    t.className = 'toast'
-    document.body.appendChild(t)
-  }
-  t.textContent = msg
-  t.className = `toast show ${type}`
-  clearTimeout(t._timeout)
-  t._timeout = setTimeout(() => t.classList.remove('show'), 2800)
-}
+import { showToast } from './lib/ui.js'
+
+export { showToast }
+
 
 // ── Auth guard for business owners
 function guardedRoute(renderFn) {
