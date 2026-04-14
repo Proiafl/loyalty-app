@@ -1,0 +1,36 @@
+{
+  "name": "LoyaltyApp",
+  "short_name": "LoyaltyApp",
+  "description": "Fidelizá tus clientes con puntos QR. Sin apps que instalar. Para peluquerías, bares, lavaderos y más.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0a",
+  "theme_color": "#ecfd18",
+  "lang": "es",
+  "categories": ["business", "productivity"],
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "48x48", "type": "image/x-icon" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Panel del negocio",
+      "url": "/#/dashboard",
+      "description": "Accedé rápido a tu dashboard"
+    },
+    {
+      "name": "Escanear QR",
+      "url": "/#/scanner?cam=1",
+      "description": "Abrí el escáner de QR directamente"
+    },
+    {
+      "name": "Mi cuenta",
+      "url": "/#/mi-cuenta",
+      "description": "Tus puntos y recompensas"
+    }
+  ]
+}
