@@ -306,6 +306,7 @@ tbody tr + tr td { border-top: 1px solid var(--surface-border); }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 textarea.form-input { resize: vertical; min-height: 100px; }
 select.form-input { appearance: none; cursor: pointer; }
+select.form-input option { background: var(--bg-elevated); color: var(--on-surface); }
 
 /* ── Toggle switch */
 .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: .6rem 0; }

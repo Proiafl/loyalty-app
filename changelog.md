@@ -1,5 +1,35 @@
 # Changelog LoyaltyApp
 
+## [2026-04-16] - Restablecimiento de Token visible en QR
+- **Descripción del cambio**:
+  - Se agregó el elemento `qr-token-txt` bajo el canvas del código QR en el dashboard de cliente (`src/pages/cliente/client-dashboard.js`).
+  - Se modificó la función `generateQR()` para actualizar el texto del token de forma dinámica, a la par del dibujado del código QR.
+- **Motivo técnico/estético**: El token servía como un id único por si el escaneo a través del dispositivo no funcionaba, ayudando al dueño del negocio a asignarle los puntos al cliente.
+- **Pasos para revertir**: Eliminar la etiqueta `<div id="cp-qr-token-txt">` del archivo HTML incrustado en `client-dashboard.js` y el código relacionado en `generateQR()`.
+
+## [2026-04-16] - Corrección de visibilidad en opciones de select
+- **Descripción del cambio**:
+  - Se agregó en `src/style.css` la regla de diseño para `select.form-input option` definiendo el color de fondo en oscuros.
+- **Motivo técnico/estético**: Las opciones de los elementos `<select>` (listas desplegables) no se distinguían dado que el texto era blanco y el fondo blanco por defecto del navegador en OS sin dark mode.
+- **Pasos para revertir**: En `src/style.css`, remover la línea `select.form-input option { background: var(--bg-elevated); color: var(--on-surface); }`.
+
+## [2026-04-14] - Corrección de Analíticas Pro en Dashboard
+- **Descripción del cambio**:
+  - Se corrigió la consulta a Supabase en `dashboard.js` para incluir los campos `points` y `total_visits`.
+  - Se solucionó el error de visualización `NaN pts/pte` y la `Tasa de retención` errónea del 0%.
+- **Motivo técnico**: Los campos necesarios para el cálculo de las métricas avanzadas no estaban siendo solicitados en el `SELECT`, resultando en valores `undefined` que rompían las operaciones aritméticas.
+- **Pasos para revertir**: Revertir el `SELECT` en `src/pages/dashboard.js` a su estado anterior.
+
+## [2026-04-14] - Simplificación de Arquitectura de Despliegue (Hostinger Fix)
+- **Descripción del cambio**:
+  - Se eliminó la carpeta redundante `deploy-branch` en favor de un flujo de despliegue centralizado desde `loyalty-app`.
+  - Se configuró `git config pull.rebase true` en el repositorio principal.
+  - Se implementó un flujo de despliegue directo de la carpeta `dist` a la rama `deploy` del repositorio remoto.
+- **Motivo técnico/estético**: Reducir la complejidad del proyecto, evitar errores de sincronización entre carpetas y adherirse estrictamente al protocolo **Hostinger Fix** solicitado.
+- **Pasos para revertir**:
+  - Restaurar la carpeta `deploy-branch` mediante un clon de la rama `deploy`: `git clone -b deploy https://github.com/Proiafl/loyalty-app.git deploy-branch`.
+
+
 ## [2026-04-12] - Corrección de Integración de MercadoPago y Despliegue
 - **Descripción del cambio**:
   - Se actualizó `src/lib/supabase.js` para exportar explícitamente la `anonKey`.

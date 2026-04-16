@@ -101,6 +101,7 @@ export async function renderClientDashboard(_, app, { user, profiles }) {
               </div>
             </div>
             <div class="qr-timer" style="margin-top:.5rem">Expira en <span id="cp-qr-countdown">90</span>s</div>
+            <div class="qr-token-txt" id="cp-qr-token-txt" style="margin-top:.5rem">Generando...</div>
           </div>
         </div>
 
@@ -237,9 +238,13 @@ export async function renderClientDashboard(_, app, { user, profiles }) {
     async function generateQR() {
       const token = await createQRToken(biz.id, profile.id, qrTtl)
       const canvas = document.getElementById('cp-qr-canvas')
+      const tokenTxt = document.getElementById('cp-qr-token-txt')
       if (!canvas) return
       if (token) {
         await QRCode.toCanvas(canvas, token, { width: 180, color: { dark: '#0a0a0a', light: '#ffffff' } })
+        if (tokenTxt) tokenTxt.textContent = token
+      } else {
+        if (tokenTxt) tokenTxt.textContent = 'Error generando QR'
       }
     }
 

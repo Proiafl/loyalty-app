@@ -7,7 +7,7 @@ import { showPlanModal } from '../components/planModal.js'
 export async function renderDashboard(_, app, { biz, user }) {
   // Fetch stats
   const [clientsRes, txRes, rewardsRes] = await Promise.all([
-    supabase.from('customers').select('id, status, last_visit_at').eq('business_id', biz.id),
+    supabase.from('customers').select('id, status, last_visit_at, points, total_visits').eq('business_id', biz.id),
     supabase.from('point_transactions').select('id, type, created_at').eq('business_id', biz.id),
     supabase.from('rewards').select('id, total_redeemed').eq('business_id', biz.id),
   ])
